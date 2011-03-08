@@ -1,3 +1,4 @@
+require 'json'
 require 'test_helper'
 
 class ServantTest < ActiveSupport::TestCase
@@ -12,5 +13,17 @@ class ServantTest < ActiveSupport::TestCase
                  "Second save did not fail due to duplicate name.") {
       servant2.save
     }
+  end
+  test "json serialization" do
+    servant = Servant.new
+    servant.name = 'Foo'
+    servant.url = 'http://127.0.0.1:80'
+    servant.protocol = "<some protocol string>"
+    json_out = servant.to_json
+
+    servant_hash = JSON.parse(json_out)
+    assert_equal(servant_hash['name'], 'Foo')
+    assert_equal(servant_hash['url'], 'http://127.0.0.1:80')
+    assert_equal(servant_hash['protocol'], "<some protocol string>")
   end
 end
