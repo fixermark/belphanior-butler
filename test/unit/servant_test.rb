@@ -9,10 +9,7 @@ class ServantTest < ActiveSupport::TestCase
     assert(servant1.save)
     servant2 = Servant.new
     servant2.name = "test"
-    assert_raise(ActiveRecord::StatementInvalid,
-                 "Second save did not fail due to duplicate name.") {
-      servant2.save
-    }
+    assert(!servant2.save())
   end
 
   test "json serialization" do

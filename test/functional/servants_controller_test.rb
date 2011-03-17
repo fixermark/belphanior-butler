@@ -12,6 +12,24 @@ class ServantsControllerTest < ActionController::TestCase
   end
 
   test "servants must have unique names" do
-    assert true
+    raw_post :add_servant, {}, {
+      "name" => "foo",
+      "url" => "http://127.0.0.1"
+    }.to_json
+    assert_ok_status
+
+    raw_post :add_servant, {}, {
+      "name" => "bar",
+      "url" => "http://127.0.0.1"
+    }.to_json
+    assert_ok_status
+    
+    raw_post :add_servant, {}, {
+      "name" => "foo",
+      "url" => "http://10.0.0.1"
+    }.to_json
+    assert_status(500)
+    response_json = JSON.parse(@response.body)
+    assert_equal("DuplicateRecord", response_json["name"])
   end
 end

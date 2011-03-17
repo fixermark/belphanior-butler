@@ -47,4 +47,8 @@ class Test::Unit::TestCase
     response_json = JSON.parse(@response.body)
     assert_equal("OK", response_json["status"])
   end
+
+  def assert_status(status_value)
+    assert_equal(status_value, @response.response_code)
+  end
 end
