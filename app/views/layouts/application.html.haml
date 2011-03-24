@@ -6,4 +6,8 @@
     = javascript_include_tag "jquery-ui-1.8.11.custom.min.js"
     = javascript_include_tag "communicate"
   %body
-    = yield
+    %div{:class=>"ui-tabs ui-widget ui-widget-content ui-corner-all"}
+      %ul{:class=>"ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"}
+        %li{:class=>"ui-state-default ui-corner-top ui-tabs-selected ui-state-active"} <a href="/servants/index">Servants</a>
+    .content
+      = yield
