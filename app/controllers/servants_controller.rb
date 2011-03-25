@@ -9,8 +9,8 @@ class ServantsController < ApplicationController
   end
 
   def get_servants
-    @servants = Servant.find(:all)
-    
+    servants = Servant.find(:all)
+    respond_with_json(servants)
   end
 
   def update_servant

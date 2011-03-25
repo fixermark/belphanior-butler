@@ -16,6 +16,10 @@ class ApplicationController < ActionController::Base
     response.content_type = "application/JSON"
     render :json => {"status" => "OK"}
   end
+  def respond_with_json(data)
+    response.content_type = "application/JSON"
+    render :json => data
+  end
   def respond_app_error(error_name)
     response.content_type = "application/JSON"
     render :status => 500, :json => {"name" => error_name}
