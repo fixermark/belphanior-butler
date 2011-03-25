@@ -1,0 +1,18 @@
+:javascript
+  function default_success_callback(data) {
+    ShowError("default_success_callback triggered; success not handled.");
+  }
+  function default_error_callback(error_description) {
+    ShowError(error_description.short_description);
+  }
+  servant_communicator = new Ajax(
+    default_success_callback, default_error_callback);
+
+  $(function () {
+    servant_communicator.get("/servants/get_servants");
+  });
+
+%h1 Servants
+
+#servant_list
+  Retrieving servants...
