@@ -1,0 +1,21 @@
+#errorbar {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: white;
+  background-color: #FF6666;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding: 10px;
+  display: none; }
+  #errorbar .closebox {
+    background-color: inherit;
+    margin-right: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; }
+  #errorbar .errormsg {
+    display: inline; }

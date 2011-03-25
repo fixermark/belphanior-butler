@@ -1,0 +1,25 @@
+// Belphanior Butler styling
+@import "corners";
+
+#errorbar {
+  @include round-corners(5px);
+  font-weight: bold;
+  color: white;
+  background-color: #FF6666;
+  margin: {
+    top: 5px;
+    bottom: 5px;
+    left: 3px;
+    right: 3px;
+  }
+  padding: 10px;
+  display: none;
+  .closebox {
+    background-color: inherit;
+    margin-right: 5px;
+    @include round-corners(5px);
+  }
+  .errormsg {
+    display: inline;
+  }
+}
