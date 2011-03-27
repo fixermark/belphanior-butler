@@ -1,6 +1,13 @@
 :javascript
   function default_success_callback(data) {
     ShowError("default_success_callback triggered; success not handled.");
+    Logger.log("default_success_callback triggered; success not handled. Data was "+data);
+    // TODO(mtomczak): This is working, but not well.
+    // [].toString is an empty string. Figure out how
+    // to parse this JSON into text correctly (JSON library
+    // routine?). Long story short: javascript .toString
+    // sucks; there has to be a better repr function out
+    // there.
   }
   function default_error_callback(error_description) {
     ShowError(error_description.short_description);
