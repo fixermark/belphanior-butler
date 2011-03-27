@@ -2,12 +2,6 @@
   function default_success_callback(data) {
     ShowError("default_success_callback triggered; success not handled.");
     Logger.log("default_success_callback triggered; success not handled. Data was "+JSON.stringify(data));
-    // TODO(mtomczak): This is working, but not well.
-    // [].toString is an empty string. Figure out how
-    // to parse this JSON into text correctly (JSON library
-    // routine?). Long story short: javascript .toString
-    // sucks; there has to be a better repr function out
-    // there.
   }
   function default_error_callback(error_description) {
     ShowError(error_description.short_description);
@@ -15,11 +9,32 @@
   servant_communicator = new Ajax(
     default_success_callback, default_error_callback);
 
+  function make_servant_entry(servant) {
+    return "";
+  }
+
+  function on_receive_servant_list(servant_list) {
+    var servant_list = "";
+    $.each(servant_list, function (i, v) {
+      servant_list += make_servant_entry(v);
+    });
+    $("#servant_list").html(servant_list);
+  }
+
   $(function () {
-    servant_communicator.get("/servants/get_servants");
+    $("#add_servant_dialog").hide();
+    $("#add_servant_button").button().click(function () {
+      $("#add_servant_dialog").show();
+      $("#add_servant_button").hide();
+    });
+    servant_communicator.get("/servants/get_servants",
+                             on_receive_servant_list);
   });
 
 %h1 Servants
 
 #servant_list
   Retrieving servants...
+#add_servant_dialog   
+  This is a dialog.
+%button{:id=>"add_servant_button"} Add Servant
