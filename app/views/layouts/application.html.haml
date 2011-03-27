@@ -5,8 +5,16 @@
     = stylesheet_link_tag "butler.css"
     = javascript_include_tag "jquery-1.5.1.min.js"
     = javascript_include_tag "jquery-ui-1.8.11.custom.min.js"
+    = javascript_include_tag "log"
     = javascript_include_tag "communicate"
     = javascript_include_tag "errorbar"
+    :javascript
+      $(function () {
+        $("#show_log_button").button()
+          .click(function () {Logger.show_log();});
+        $("#hide_log_button").button()
+          .click(function () {Logger.hide_log();});
+      });
   %body
     %div{:class=>"ui-tabs ui-widget ui-widget-content ui-corner-all"}
       %ul{:class=>"ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"}
@@ -18,3 +26,11 @@
 
     .content
       = yield
+    %button{:id=>"show_log_button"} Show Log
+    #log
+      .log_background
+      .log_panel
+        .log_frame
+          %ul{:id=>"log_content"}
+            %li Log item.
+      %button{:id=>"hide_log_button"} Hide Log

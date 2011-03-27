@@ -19,3 +19,45 @@
     border-radius: 5px; }
   #errorbar .errormsg {
     display: inline; }
+
+#log {
+  display: none; }
+  #log .log_background {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    opacity: .4;
+    background-color: black; }
+  #log .log_panel {
+    display: block;
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    right: 30px;
+    bottom: 30px;
+    padding: 10px;
+    opacity: 1;
+    background-color: white;
+    z-index: 5; }
+    #log .log_panel .log_frame {
+      display: block;
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      bottom: 30px; }
+      #log .log_panel .log_frame #log_content {
+        display: block;
+        overflow: scroll;
+        height: 100%; }
+  #log #hide_log_button {
+    position: absolute;
+    bottom: 0px;
+    left: 0px; }
+
+#show_log_button {
+  position: absolute;
+  left: 0px;
+  bottom: 0px; }
