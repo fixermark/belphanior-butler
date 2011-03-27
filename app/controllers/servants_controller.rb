@@ -4,7 +4,7 @@ class ServantsController < ApplicationController
     if not new_servant.save
       respond_app_error ("DuplicateRecord")
     else
-      respond_ok
+      respond_with_json(new_servant)
     end
   end
 

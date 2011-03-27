@@ -48,6 +48,39 @@ class Test::Unit::TestCase
     assert_equal("OK", response_json["status"])
   end
 
+  # Validates that two JSON-style objects are equivalent
+  # Equivalence is defined as follows:
+  #   Array type: each element equivalent
+  #   Dict type: For each key |k| in reference, key in value
+  #    exists and value for the key is equivalent. 
+  #    NOTE: This means that the input can contain 
+  #    additional data, and this is acceptable.
+  #   All others: Simple ruby equivalence.
+  def assert_equivalent_json_objects(reference, tested)
+    assert_equal(reference.class(), tested.class())
+    if reference.class() == [].class()
+      assert_equal(reference.length, tested.length)
+      for i in 0..reference.length
+        assert_equivalent_json_objects(
+          reference[i], tested[i])
+      end
+    elsif reference.class() == {}.class()
+      reference.each do |key, value|
+        assert_equal(true, tested.has_key?(key))
+        assert_equivalent_json_objects(value, tested[key])
+      end
+    else
+    # String or number (or other type): value compare
+      assert_equal(reference, tested)  
+    end
+  end
+
+  def assert_ok_with_data(data)
+    assert_equal(200, @response.response_code)
+    response_json = JSON.parse(@response.body)
+    assert_equivalent_json_objects(data, response_json)
+  end
+
   def assert_status(status_value)
     assert_equal(status_value, @response.response_code)
   end
