@@ -1,7 +1,7 @@
 :javascript
   function default_success_callback(data) {
     ShowError("default_success_callback triggered; success not handled.");
-    Logger.log("default_success_callback triggered; success not handled. Data was "+data);
+    Logger.log("default_success_callback triggered; success not handled. Data was "+JSON.stringify(data));
     // TODO(mtomczak): This is working, but not well.
     // [].toString is an empty string. Figure out how
     // to parse this JSON into text correctly (JSON library
