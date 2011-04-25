@@ -1,3 +1,8 @@
+.form_dialog {
+  border-top: 2px #4297d7 solid; }
+  .form_dialog input {
+    width: 90%; }
+
 #errorbar {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;

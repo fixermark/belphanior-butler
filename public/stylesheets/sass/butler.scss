@@ -1,6 +1,14 @@
 // Belphanior Butler styling
 @import "corners";
 
+.form_dialog {
+  border-top: 2px #4297d7 solid;
+//  padding: 5px;
+  input {
+    width: 90%;
+  }
+}
+
 #errorbar {
   @include round-corners(5px);
   font-weight: bold;

@@ -27,6 +27,13 @@
       $("#add_servant_dialog").show();
       $("#add_servant_button").hide();
     });
+    $("#commit_add_servant").button().click(function () {
+      // if (commit_add_servant()) { 
+      // clear_add_servant_dialog()
+      $("#add_servant_dialog").hide();
+      $("#add_servant_button").show();
+      // }
+    });
     servant_communicator.get("/servants/get_servants",
                              on_receive_servant_list);
   });
@@ -35,6 +42,12 @@
 
 #servant_list
   Retrieving servants...
-#add_servant_dialog   
-  This is a dialog.
+#add_servant_dialog{:class=>"form_dialog ui-widget"}
+  %p Servant name
+  %input{:id=>"servant_name"}
+  %p Servant URL
+  %input{:id=>"servant_url"}
+  %button{:id=>"commit_add_servant"} Add Servant
+  
+
 %button{:id=>"add_servant_button"} Add Servant
