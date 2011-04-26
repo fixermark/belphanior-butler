@@ -13,7 +13,9 @@ class Servant < ActiveRecord::Base
     json_hash = JSON.parse(json)
     self.name = json_hash['name']
     self.url = json_hash['url']
-    self.protocol = json_hash['protocol']
+    if json_hash.has_key?('protocol') then
+      self.protocol = json_hash['protocol']
+    end
   end
   def self.new_from_json(json)
     result = self.new

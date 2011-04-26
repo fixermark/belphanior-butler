@@ -18,11 +18,16 @@ function AjaxError(error_class, short_description, long_description) {
 function Ajax(default_success_callback, default_fail_callback) {
   this.default_success_callback = default_success_callback;
   this.default_fail_callback = default_fail_callback;
+  // Send a command asynchronously to a target.
+  // Args:
+  //   method: "GET", "POST", etc.
   this.communicate = function(
     method, uri, data, success_callback, fail_callback) {
     $.ajax({
       type: method,
       url: uri,
+      data: JSON.stringify(data),
+      contentType: "application/json",
       dataType: "json",
       success: this.success_handler(
         success_callback,

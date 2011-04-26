@@ -1,10 +1,15 @@
 :javascript
+  function clear_dialog(top_element) {
+    $("input", top_element).val("");
+  }
+
   function default_success_callback(data) {
     ShowError("default_success_callback triggered; success not handled.");
     Logger.log("default_success_callback triggered; success not handled. Data was "+JSON.stringify(data));
   }
   function default_error_callback(error_description) {
     ShowError(error_description.short_description);
+    Logger.log(error_description.long_description);
   }
   servant_communicator = new Ajax(
     default_success_callback, default_error_callback);
@@ -21,6 +26,28 @@
     $("#servant_list").html(servant_list);
   }
 
+  // Pushes a servant into the database. Returns true
+  // if commit is successful; false otherwise.
+  function commit_add_servant() {
+    msg = {
+      name: $("#servant_name").val(),
+      url: $("#servant_url").val()
+    };
+    // TODO(mtomczak): Custom error handler to properly
+    // report duplicate name error.
+    servant_communicator.post(
+      "/servants/add_servant",
+      msg,
+      on_commit_add_servant_success);
+  }
+
+  function on_commit_add_servant_success(data) {
+    ShowError("Servant added.");
+    clear_dialog($("#add_servant_dialog"));
+    $("#add_servant_dialog").hide();
+    $("#add_servant_button").show();
+  }
+
   $(function () {
     $("#add_servant_dialog").hide();
     $("#add_servant_button").button().click(function () {
@@ -28,11 +55,7 @@
       $("#add_servant_button").hide();
     });
     $("#commit_add_servant").button().click(function () {
-      // if (commit_add_servant()) { 
-      // clear_add_servant_dialog()
-      $("#add_servant_dialog").hide();
-      $("#add_servant_button").show();
-      // }
+      commit_add_servant();
     });
     servant_communicator.get("/servants/get_servants",
                              on_receive_servant_list);
