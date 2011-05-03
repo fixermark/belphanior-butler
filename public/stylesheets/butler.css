@@ -25,6 +25,42 @@
   #errorbar .errormsg {
     display: inline; }
 
+#servant_list {
+  display: table;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
+  width: auto;
+  position: relative; }
+  #servant_list .servant_head {
+    display: table-row;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px; }
+    #servant_list .servant_head .name_head {
+      display: table-cell;
+      width: 300px;
+      font-weight: bold; }
+    #servant_list .servant_head .url_head {
+      display: table-cell;
+      font-weight: bold; }
+  #servant_list .servant_entry {
+    display: table-row;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 10px;
+    padding-right: 10px; }
+    #servant_list .servant_entry .name {
+      width: 300px;
+      display: table-cell; }
+    #servant_list .servant_entry .url {
+      width: 300px;
+      display: table-cell; }
+    #servant_list .servant_entry .controls {
+      display: table-cell; }
+
 #log {
   display: none; }
   #log .log_background {

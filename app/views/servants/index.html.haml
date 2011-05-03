@@ -15,15 +15,24 @@
     default_success_callback, default_error_callback);
 
   function make_servant_entry(servant) {
-    return "";
+    result =  "<div class='servant_entry'>";
+    result += "<div class='name'>"+servant['name']+"</div>";
+    result += "<div class='url'>"+servant['url']+"</div>";
+    result += "<div class='controls'>";
+    result += "<button>Edit</button><button>Delete</button>";
+    result += "</div>";
+    result += "</div>";
+    return result;
   }
 
   function on_receive_servant_list(servant_list) {
-    var servant_list = "";
+    var servant_list_html = "<div class='servant_head'>" +
+       "<div class='name_head'>Name</div><div class='url_head'>URL</div>" +
+       "</div>";
     $.each(servant_list, function (i, v) {
-      servant_list += make_servant_entry(v);
+      servant_list_html += make_servant_entry(v);
     });
-    $("#servant_list").html(servant_list);
+    $("#servant_list").html(servant_list_html);
   }
 
   // Pushes a servant into the database. Returns true
@@ -46,6 +55,12 @@
     clear_dialog($("#add_servant_dialog"));
     $("#add_servant_dialog").hide();
     $("#add_servant_button").show();
+    update_servant_list();
+  }
+
+  function update_servant_list() {
+    servant_communicator.get("/servants/get_servants",
+                             on_receive_servant_list);
   }
 
   $(function () {
@@ -57,8 +72,7 @@
     $("#commit_add_servant").button().click(function () {
       commit_add_servant();
     });
-    servant_communicator.get("/servants/get_servants",
-                             on_receive_servant_list);
+    update_servant_list();
   });
 
 %h1 Servants

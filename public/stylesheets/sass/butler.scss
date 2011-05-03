@@ -32,6 +32,50 @@
   }
 }
 
+#servant_list {
+  display: table;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
+  width: auto;
+  position: relative;
+  .servant_head {
+    display: table-row;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    .name_head {
+      display: table-cell;
+      width: 300px;
+      font-weight: bold;
+    }
+    .url_head {
+      display: table-cell;
+      font-weight: bold;
+     }
+  }
+  .servant_entry {
+    display: table-row;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    .name {
+      width: 300px;
+      display: table-cell;
+    }
+    .url {
+      width: 300px;
+      display: table-cell;
+    }
+    .controls {
+      display: table-cell;
+    }
+  }
+}
+
 #log {
   display: none;
   .log_background {
