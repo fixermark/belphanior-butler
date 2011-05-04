@@ -19,7 +19,9 @@
     result += "<div class='name'>"+servant['name']+"</div>";
     result += "<div class='url'>"+servant['url']+"</div>";
     result += "<div class='controls'>";
-    result += "<button>Edit</button><button>Delete</button>";
+    result += "<button>Edit</button>";
+    result += "<button onclick='delete_servant(\""+
+       servant['name']+"\")'>Delete</button>";
     result += "</div>";
     result += "</div>";
     return result;
@@ -61,6 +63,16 @@
   function update_servant_list() {
     servant_communicator.get("/servants/get_servants",
                              on_receive_servant_list);
+  }
+
+  function delete_servant(servant_name) {
+    servant_communicator.post(
+      "/servants/delete_servant?name="+servant_name,
+      "",
+      function () {
+        ShowError("Servant Deleted.");
+        update_servant_list();
+      });
   }
 
   $(function () {

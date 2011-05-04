@@ -17,6 +17,9 @@ class ServantsController < ApplicationController
   end
 
   def delete_servant
+    name = params[:name]
+    servant_to_delete = Servant.delete_all(:name=>name)
+    respond_ok
   end
 
 end
