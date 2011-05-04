@@ -18,12 +18,22 @@ class ServantTest < ActiveSupport::TestCase
     servant.url = 'http://127.0.0.1:80'
     servant.protocol = "<some protocol string>"
     json_out = servant.to_json
-
     servant_hash = JSON.parse(json_out)
     assert_equal(servant_hash['name'], 'Foo')
     assert_equal(servant_hash['url'], 'http://127.0.0.1:80')
     assert_equal(servant_hash['protocol'], "<some protocol string>")
+    assert_equal(servant_hash['status'], "loading_roles")
+
+    servant2 = Servant.new
+    servant2.name = 'Foo'
+    servant2.url = 'http://127.0.0.1:80'
+    json_out = servant2.to_json
+    servant_hash = JSON.parse(json_out)
+    assert_equal(servant_hash['name'], 'Foo')
+    assert_equal(servant_hash['url'], 'http://127.0.0.1:80')
+    assert_equal(servant_hash['status'], "loading_protocol")
   end
+
   test "json deserialization" do
     json = "{\"name\":\"foo\", \"url\":\"http://127.0.0.1\", " +
       "\"protocol\":\"<A protocol>\"}"

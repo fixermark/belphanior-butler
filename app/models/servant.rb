@@ -6,7 +6,8 @@ class Servant < ActiveRecord::Base
     {
       'name' => self.name,
       'url' => self.url,
-      'protocol' => self.protocol
+      'protocol' => self.protocol,
+      'status' => self.status
     }.to_json(*a)
   end
   def from_json(json)
@@ -15,6 +16,15 @@ class Servant < ActiveRecord::Base
     self.url = json_hash['url']
     if json_hash.has_key?('protocol') then
       self.protocol = json_hash['protocol']
+    end
+  end
+  def status
+    if self.protocol? then
+      # TODO(mtomczak): Determine if all of the roles are
+      # loaded. Remember, there may be multiple.
+      :loading_roles
+    else
+      :loading_protocol
     end
   end
   def self.new_from_json(json)
