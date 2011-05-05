@@ -1,4 +1,5 @@
 :javascript
+  servant_list={}
   function status_message(status_code) {
     if (status_code == "loading_roles") {
       return "Loading roles...";
@@ -25,7 +26,7 @@
     default_success_callback, default_error_callback);
 
   function make_servant_entry(servant) {
-    result =  "<div class='servant_entry'>";
+    result =  "<div class='servant_entry' id='servant_"+servant['name']+"'>";
     result += "<div class='name'>"+servant['name']+"</div>";
     result += "<div class='url'>"+servant['url']+"</div>";
     result += "<div class='status'>"+status_message(servant['status'])+"</div>";
@@ -42,10 +43,13 @@
     var servant_list_html = "<div class='servant_head'>" +
        "<div class='name_head'>Name</div><div class='url_head'>URL</div><div class='status_head'>Status</div>" +
        "</div>";
+    var new_servant_list={};
     $.each(servant_list, function (i, v) {
+      new_servant_list[v['name']] = v
       servant_list_html += make_servant_entry(v);
     });
     $("#servant_list").html(servant_list_html);
+    servant_list = new_servant_list;
   }
 
   // Pushes a servant into the database. Returns true
