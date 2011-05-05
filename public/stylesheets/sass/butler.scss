@@ -52,8 +52,14 @@
       font-weight: bold;
     }
     .url_head {
+      width: 300px;
       display: table-cell;
       font-weight: bold;
+     }
+     .status_head {
+       width: 100px;
+       display: table-cell;
+       font-weight: bold;
      }
   }
   .servant_entry {
@@ -68,6 +74,10 @@
     }
     .url {
       width: 300px;
+      display: table-cell;
+    }
+    .status {
+      width: 100px;
       display: table-cell;
     }
     .controls {

@@ -44,6 +44,11 @@
       width: 300px;
       font-weight: bold; }
     #servant_list .servant_head .url_head {
+      width: 300px;
+      display: table-cell;
+      font-weight: bold; }
+    #servant_list .servant_head .status_head {
+      width: 100px;
       display: table-cell;
       font-weight: bold; }
   #servant_list .servant_entry {
@@ -57,6 +62,9 @@
       display: table-cell; }
     #servant_list .servant_entry .url {
       width: 300px;
+      display: table-cell; }
+    #servant_list .servant_entry .status {
+      width: 100px;
       display: table-cell; }
     #servant_list .servant_entry .controls {
       display: table-cell; }
