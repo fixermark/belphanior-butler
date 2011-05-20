@@ -1,5 +1,5 @@
 :javascript
-  servant_list={}
+  g_servant_list={}
   function status_message(status_code) {
     if (status_code == "loading_roles") {
       return "Loading roles...";
@@ -39,6 +39,15 @@
     return result;
   }
 
+  function servants_are_still_waiting(servant_list) {
+    $.each(servant_list, function (i,v) {
+      if (v['status'] != 'loaded') {
+        return false;
+      }
+    });
+    return true;
+  }
+
   function on_receive_servant_list(servant_list) {
     var servant_list_html = "<div class='servant_head'>" +
        "<div class='name_head'>Name</div><div class='url_head'>URL</div><div class='status_head'>Status</div>" +
@@ -49,7 +58,10 @@
       servant_list_html += make_servant_entry(v);
     });
     $("#servant_list").html(servant_list_html);
-    servant_list = new_servant_list;
+    g_servant_list = new_servant_list;
+    if (servants_are_still_waiting(servant_list)) {
+      setTimeout(update_servant_status, 5000);
+    }
   }
 
   // Pushes a servant into the database. Returns true
@@ -73,6 +85,23 @@
     $("#add_servant_dialog").hide();
     $("#add_servant_button").show();
     update_servant_list();
+  }
+
+  function on_receive_servant_status(servant_list) {
+    // TODO(mtomczak): Move global update code here.
+    $.each(servant_list, function (i, v) {
+      $('#servant_'+v['name']+' > div.status')
+         .text(status_message(v['status']));
+    });
+    g_servant_list = servant_list;
+    if (servants_are_still_waiting(servant_list)) {
+      setTimeout(update_servant_status, 5000);
+    }
+  }
+
+  function update_servant_status() {
+    servant_communicator.get("/servants/get_servants",
+                             on_receive_servant_status);
   }
 
   function update_servant_list() {

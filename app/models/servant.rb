@@ -19,6 +19,7 @@ class Servant < ActiveRecord::Base
     end
   end
   def status
+    # Three statuses are loading_roles, loading_protocol, and loaded.
     if self.protocol? then
       # TODO(mtomczak): Determine if all of the roles are
       # loaded. Remember, there may be multiple.
