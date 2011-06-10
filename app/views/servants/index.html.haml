@@ -25,8 +25,8 @@
   servant_communicator = new Ajax(
     default_success_callback, default_error_callback);
 
-  function make_servant_entry(servant) {
-    result =  "<div class='servant_entry' id='servant_"+servant['name']+"'>";
+  function make_servant_entry(servant, servant_index) {
+    result =  "<div class='servant_entry' id='servant_"+servant_index+"'>";
     result += "<div class='name'>"+servant['name']+"</div>";
     result += "<div class='url'>"+servant['url']+"</div>";
     result += "<div class='status'>"+status_message(servant['status'])+"</div>";
@@ -55,7 +55,7 @@
     var new_servant_list={};
     $.each(servant_list, function (i, v) {
       new_servant_list[v['name']] = v
-      servant_list_html += make_servant_entry(v);
+      servant_list_html += make_servant_entry(v, i);
     });
     $("#servant_list").html(servant_list_html);
     g_servant_list = new_servant_list;
@@ -90,7 +90,7 @@
   function on_receive_servant_status(servant_list) {
     // TODO(mtomczak): Move global update code here.
     $.each(servant_list, function (i, v) {
-      var servants = $('#servant_'+v['name']+' > div.status');
+      var servants = $('#servant_' + i + ' > div.status');
       servants.text(status_message(v['status']));
     });
     g_servant_list = servant_list;
