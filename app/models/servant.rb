@@ -22,11 +22,21 @@ class Servant < ActiveRecord::Base
     # Three statuses are loading_roles, loading_protocol, and loaded.
     if self.protocol? then
       # TODO(mtomczak): Determine if all of the roles are
-      # loaded. Remember, there may be multiple.
+      #   loaded. Remember, there may be multiple.
+      # TODO(mtomczak): It's possible an error could occur.
+      #   If so, need an :error status (and code and human-
+      #   readable form).
       :loading_roles
     else
       :loading_protocol
     end
+  end
+  
+  def log_error(status, err_msg)
+    # TODO(mtomczak): Finish implementation of logging.
+    #   Log should be stored on the DB object.
+    logger.error("Error reported for servant with URL " +
+                 self.url + ": " + err_msg)
   end
   def self.new_from_json(json)
     result = self.new

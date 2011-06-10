@@ -90,8 +90,8 @@
   function on_receive_servant_status(servant_list) {
     // TODO(mtomczak): Move global update code here.
     $.each(servant_list, function (i, v) {
-      $('#servant_'+v['name']+' > div.status')
-         .text(status_message(v['status']));
+      var servants = $('#servant_'+v['name']+' > div.status');
+      servants.text(status_message(v['status']));
     });
     g_servant_list = servant_list;
     if (servants_are_still_waiting(servant_list)) {
