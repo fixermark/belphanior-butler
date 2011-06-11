@@ -11,8 +11,12 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
     logger.info "Updating servants..."
     servants = Servant.find(:all)
     servants.each do |servant|
-      if servant.status == :loading_protocol then
-        load_protocol servant
+      begin
+        if servant.status == :loading_protocol then
+          load_protocol servant
+        end
+      rescue => e
+        logger.error(e.message + "\n" + e.backtrace.join("\n")) 
       end
     end
   end
