@@ -1,6 +1,9 @@
 require 'net/http'
 require 'uri'
 
+class LoadServantsWorkerException < Exception
+end
+
 class LoadServantsWorker < BackgrounDRb::MetaWorker
   set_worker_name :load_servants_worker
   def create(args = nil)
@@ -15,6 +18,9 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
         if servant.status == :loading_protocol then
           load_protocol servant
         end
+        if servant.status == :loading_roles then
+          load_roles servant
+        end
       rescue => e
         logger.error(e.message + "\n" + e.backtrace.join("\n")) 
       end
@@ -23,7 +29,50 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
 
   def load_protocol(servant)
     begin
-      source_url = URI.parse(servant.url)
+      servant.protocol = get_json(servant.url)
+    rescue LoadServantsWorkerException => e
+      servant.log_error(
+        :could_not_load_protocol,
+        "Error while loading protocol: " +
+        e.to_str())
+    end
+    if not servant.save then
+      # TODO(mtomczak): Figure out how to re-sanitize the
+      # record and attempt to log its status
+      logger.error("Servant named '" + servant.name +
+                   "' failed to save when updating protocol.")
+    end
+  end
+  
+  def load_roles(servant)
+    # Loads roles. Should not be called if servant.roles
+    # is nil.
+    roles = servant.roles
+    role_urls = servant.role_urls
+    roles.each_with_index do |role, index|
+      if not role then
+        load_role role_urls[index]
+      end
+    end
+  end
+
+  def load_role(role_url)
+    # Updates the role database to include the role at
+    # the specified URL. Returns the role if successful.
+    # Raises LoadServantsWorkerException if unsuccessful.
+    role_json = get_json(role_url)
+    role = Role.new_from_json(role_json)
+    role.url = role_url
+    if not role.save then
+      # TODO: Handle role save error
+    end
+  end
+
+  def get_json(at_url)
+    # Retrieve JSON at a URL.
+    # Returns the resulting JSON, or raises an error.
+    begin
+      source_url = URI.parse(at_url)
       request = Net::HTTP::Get.new(source_url.path)
       response = Net::HTTP.start(source_url.host, source_url.port) {|http|
         http.request(request)
@@ -31,26 +80,16 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
       # validate status
       # TODO(mtomczak): Does net handle redirection?
       if response.code != "200" then
-        servant.log_error(:could_not_retrieve_protocol,
-                          "When retrieving the protocol from '" +
-                          servant.url +
-                          "', protocol server reported code " +
-                          response.code + 
-                          " instead of 200.")
+        raise LoadServantsWorkerException, (
+          "While retrieving URL '" + at_url + 
+          "', received response code of '" + response.code +
+          "'.")
       else
-        servant.protocol = response.body
+        return response.body
       end
     rescue URI::InvalidURIError => e
-      servant.log_error(:could_not_parse_url,
-                        "The servant's URL of '" +
-                        servant.url + 
-                        "' could not be parsed.")
-    end
-    if not servant.save then
-      # TODO(mtomczak): Figure out how to re-sanitize the
-      # record and attempt to log its status
-      logger.error("Servant named '" + servant.name +
-                   "' failed to save when updating protocol.")
+      raise LoadServantsWorkerException, (
+        "URL '" + at_url + "' could not be parsed.")
     end
   end
 end

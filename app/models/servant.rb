@@ -2,6 +2,7 @@ require 'json'
 
 class Servant < ActiveRecord::Base
   validates_uniqueness_of :name
+
   def to_json(*a)
     {
       'name' => self.name,
@@ -10,6 +11,7 @@ class Servant < ActiveRecord::Base
       'status' => self.status
     }.to_json(*a)
   end
+
   def from_json(json)
     json_hash = JSON.parse(json)
     self.name = json_hash['name']
@@ -18,19 +20,77 @@ class Servant < ActiveRecord::Base
       self.protocol = json_hash['protocol']
     end
   end
+
   def status
     # Three statuses are loading_roles, loading_protocol, and loaded.
-    if self.protocol? then
-      # TODO(mtomczak): Determine if all of the roles are
-      #   loaded. Remember, there may be multiple.
+    if not self.protocol? then
+      :loading_protocol
+    else
       # TODO(mtomczak): It's possible an error could occur.
       #   If so, need an :error status (and code and human-
       #   readable form).
-      :loading_roles
-    else
-      :loading_protocol
+      roles = self.roles
+      if not roles or roles.include? nil then
+        :loading_roles
+      else
+        :loaded
+      end
     end
   end
+
+  def role_urls
+    # Returnes the URLs associated with the roles (as an
+    # array), or nil if the protocol does not exist.
+    # Any invalid role URLs are returned as nil.
+    # Relative URLs are yielded as absolute URLs (with the
+    # servant's URL as the absolute location).
+    if not self.protocol? then
+      return nil
+    end
+    begin
+      protocol_object = JSON.parse(self.protocol)
+      if not protocol_object.key? "roles" then
+        return nil
+      end
+      role_urls = protocol_object["roles"].map { |role_object|
+        if not role_object.has_key? "role_url" then
+          nil
+        else
+          # TODO(mtomczak): Convert relative URLs to
+          # absolute URLs.
+          role_object["role_url"]
+        end
+      }
+      return roles
+    rescue JSON::ParserError => e
+      log_error(:could_not_parse_protocol,
+                "The servant's protocol could not be " +
+                "parsed.")
+      return nil
+    end
+  end
+  
+  def roles
+    # Returns the roles associated with this protocol
+    # (as an array), or nil if the roles do not exist 
+    # (or cannot be loaded).
+    #
+    # The returned array has a Role object for each role,
+    # or nil if the role object is missing.
+    #
+    # Errors that occur in parsing JSON result in an error
+    # being logged.
+    urls = role_urls
+    if not urls then
+      return nil
+    end
+    urls.map { |url|
+      if not url then
+        nil
+      else
+        Role.find_by_url(url)
+      end
+    }
   
   def log_error(status, err_msg)
     # TODO(mtomczak): Finish implementation of logging.
