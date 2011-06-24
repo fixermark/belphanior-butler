@@ -64,8 +64,9 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
     role = Role.new_from_json(role_json)
     role.url = role_url
     if not role.save then
-      # TODO: Handle role save error
+      raise LoadServantsWorkerException, "Could not save role."
     end
+    role
   end
 
   def get_json(at_url)
