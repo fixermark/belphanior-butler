@@ -73,6 +73,8 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
     # Retrieve JSON at a URL.
     # Returns the resulting JSON, or raises an error.
     begin
+      log = BackgrounDRb::DebugMaster.new(:foreground)
+      log.info("Retrieving json at " + (at_url.to_s))
       source_url = URI.parse(at_url)
       request = Net::HTTP::Get.new(source_url.path)
       response = Net::HTTP.start(source_url.host, source_url.port) {|http|

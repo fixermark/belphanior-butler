@@ -1,4 +1,6 @@
 require 'json'
+require 'uri'
+require 'logger'
 
 class Servant < ActiveRecord::Base
   validates_uniqueness_of :name
@@ -39,7 +41,7 @@ class Servant < ActiveRecord::Base
   end
 
   def role_urls
-    # Returnes the URLs associated with the roles (as an
+    # Returns the URLs associated with the roles (as an
     # array), or nil if the protocol does not exist.
     # Any invalid role URLs are returned as nil.
     # Relative URLs are yielded as absolute URLs (with the
@@ -49,19 +51,24 @@ class Servant < ActiveRecord::Base
     end
     begin
       protocol_object = JSON.parse(self.protocol)
-      if not protocol_object.key? "roles" then
+      protocol_url = URI.parse(self.url)
+      if not protocol_object.has_key? "roles" then
         return nil
       end
       role_urls = protocol_object["roles"].map { |role_object|
         if not role_object.has_key? "role_url" then
           nil
         else
-          # TODO(mtomczak): Convert relative URLs to
-          # absolute URLs.
-          role_object["role_url"]
+          role_url = URI.parse(role_object["role_url"])
+          if not role_url.host then
+            new_url = URI.parse(protocol_url.to_s)
+            new_url.path = role_url.path
+            role_url = new_url
+          end
+          role_url
         end
       }
-      return roles
+      return role_urls
     rescue JSON::ParserError => e
       log_error(:could_not_parse_protocol,
                 "The servant's protocol could not be " +
@@ -91,7 +98,7 @@ class Servant < ActiveRecord::Base
         Role.find_by_url(url)
       end
     }
-  
+  end
   def log_error(status, err_msg)
     # TODO(mtomczak): Finish implementation of logging.
     #   Log should be stored on the DB object.

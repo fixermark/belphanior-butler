@@ -48,4 +48,36 @@ class ServantTest < ActiveSupport::TestCase
     servant2 = Servant.new_from_json(json)
     assert_equal(servant.name, "foo")
   end
+
+  test "complete role urls" do
+    json = <<-eof
+    {
+      "name" : "foo",
+      "url" : "http://127.0.0.1",
+      "protocol" : "{\\\"roles\\\" : [{\\\"role_url\\\" : \\\"http://myhost.com:3000/relative/path\\\",\\\"handlers\\\" : []}]}"
+    }       
+    eof
+    servant = Servant.new_from_json(json)
+    urls = servant.role_urls
+    assert_equal("myhost.com", urls[0].host)
+    assert_equal(3000, urls[0].port)
+    assert_equal("http", urls[0].scheme)
+    assert_equal("/relative/path", urls[0].path)
+  end
+
+  test "incomplete role urls" do
+    json = <<-eof
+    {
+      "name" : "foo",
+      "url" : "http://127.0.0.1",
+      "protocol" : "{\\\"roles\\\" : [{\\\"role_url\\\" : \\\"/relative/path\\\",\\\"handlers\\\" : []}]}"
+    }       
+    eof
+    servant = Servant.new_from_json(json)
+    urls = servant.role_urls
+    assert_equal("127.0.0.1", urls[0].host)
+    assert_equal(80, urls[0].port)
+    assert_equal("http", urls[0].scheme)
+    assert_equal("/relative/path", urls[0].path)
+  end
 end
