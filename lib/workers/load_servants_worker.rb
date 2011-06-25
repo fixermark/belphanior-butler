@@ -70,29 +70,24 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
   end
 
   def get_json(at_url)
-    # Retrieve JSON at a URL.
+    # Retrieve JSON at a URL (as a URI).
     # Returns the resulting JSON, or raises an error.
-    begin
-      log = BackgrounDRb::DebugMaster.new(:foreground)
-      log.info("Retrieving json at " + (at_url.to_s))
-      source_url = URI.parse(at_url)
-      request = Net::HTTP::Get.new(source_url.path)
-      response = Net::HTTP.start(source_url.host, source_url.port) {|http|
-        http.request(request)
-      }
-      # validate status
-      # TODO(mtomczak): Does net handle redirection?
-      if response.code != "200" then
-        raise LoadServantsWorkerException, (
-          "While retrieving URL '" + at_url + 
-          "', received response code of '" + response.code +
-          "'.")
-      else
-        return response.body
-      end
-    rescue URI::InvalidURIError => e
+    log = BackgrounDRb::DebugMaster.new(:foreground)
+    log.info("Retrieving json at " + (at_url.to_s))
+    source_url = at_url
+    request = Net::HTTP::Get.new(source_url.path)
+    response = Net::HTTP.start(source_url.host, source_url.port) {|http|
+      http.request(request)
+    }
+    # validate status
+    # TODO(mtomczak): Does net handle redirection?
+    if response.code != "200" then
       raise LoadServantsWorkerException, (
-        "URL '" + at_url + "' could not be parsed.")
+                                          "While retrieving URL '" + at_url + 
+                                          "', received response code of '" + response.code +
+                                          "'.")
+    else
+      return response.body
     end
   end
 end
