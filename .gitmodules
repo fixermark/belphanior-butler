@@ -1,3 +1,6 @@
 [submodule "vendor/plugins/backgroundrb"]
 	path = vendor/plugins/backgroundrb
 	url = git://github.com/gnufied/backgroundrb.git
+[submodule "public/javascripts/jquery-url-parser"]
+	path = public/javascripts/jquery-url-parser
+	url = git://github.com/allmarkedup/jQuery-URL-Parser.git
