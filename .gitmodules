@@ -4,3 +4,6 @@
 [submodule "public/javascripts/jquery-url-parser"]
 	path = public/javascripts/jquery-url-parser
 	url = git://github.com/allmarkedup/jQuery-URL-Parser.git
+[submodule "public/qunit"]
+	path = public/qunit
+	url = https://github.com/jquery/qunit.git
