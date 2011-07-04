@@ -10,7 +10,9 @@ class DocumentationController < ApplicationController
     @roles = []
     roles_from_db.each do |role|
       if role.model?
-        @roles << role.model
+        @roles << {
+          "url" => role.url.to_s, 
+          "model" => role.model}
       end
     end
   end

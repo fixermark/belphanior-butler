@@ -5,6 +5,13 @@
     ok(true, "QUnit online.");
   });
 
+  module("Role");
+  test("Create role", function() {
+    var role = new Role('{"name" : "test", "data" : "test data"}', "http://test_url");
+    equal(role.name(), "test");
+    equal(role.url, "http://test_url");
+  });
+
 #qunit-header Belphanior unit tests
 #qunit-banner
 #qunit-tests

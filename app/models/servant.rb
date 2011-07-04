@@ -1,6 +1,7 @@
 require 'json'
 require 'uri'
 require 'logger'
+require 'uri'
 
 class Servant < ActiveRecord::Base
   validates_uniqueness_of :name
@@ -21,6 +22,14 @@ class Servant < ActiveRecord::Base
     if json_hash.has_key?('protocol') then
       self.protocol = json_hash['protocol']
     end
+  end
+
+  def url=(new_url)
+    write_attribute(:url, new_url.to_s)
+  end
+
+  def url
+    URI.parse(read_attribute(:url))
   end
 
   def status
@@ -51,7 +60,7 @@ class Servant < ActiveRecord::Base
     end
     begin
       protocol_object = JSON.parse(self.protocol)
-      protocol_url = URI.parse(self.url)
+      protocol_url = self.url
       if not protocol_object.has_key? "roles" then
         return nil
       end
@@ -95,7 +104,7 @@ class Servant < ActiveRecord::Base
       if not url then
         nil
       else
-        Role.find_by_url(url)
+        Role.find_by_url(url.to_s)
       end
     }
   end
