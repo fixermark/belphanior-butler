@@ -11,7 +11,6 @@ class LoadServantsWorker < BackgrounDRb::MetaWorker
   end
 
   def update_servants
-    logger.info "Updating servants..."
     servants = Servant.find(:all)
     servants.each do |servant|
       begin
