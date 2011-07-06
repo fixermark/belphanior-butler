@@ -134,3 +134,87 @@
   left: 0px;
   bottom: 0px;
 }
+
+//// Documentation Styles ////
+
+$documentation_left_nav_size: 180px;
+$documentation_heading_size: 32px;
+$documentation_subheading_size: 24px;
+$documentation_command_name_size: 20px;
+
+.role_list {
+  position: fixed;
+  min-width: $documentation_left_nav_size;
+  min-height: 100%;
+  margin-top: 0px;
+  mergin-bottom: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-right: 2px blue solid;
+  float: left;
+  li {
+    font-style: italic;
+    list-style: none;
+    font-size: 16px;
+  }
+  .selected {
+    font-weight: bold;
+  }
+}
+
+.role_panel {
+  margin-left: $documentation_left_nav_size + 5px;
+}
+
+.role_name {
+  font-size: $documentation_heading_size;
+  font-weight: bold;
+}
+
+.role_description {
+  margin-left: 24px;
+}
+
+.role_header {
+  font-style: italic;
+  font-weight: bold;
+  font-size: $documentation_subheading_size;
+  margin-top: 24px;
+}
+
+.role_subheader {
+  font-style: italic;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.role_command {
+  margin-top: 20px;
+  border-top: 2px solid;
+  .role_command_name {
+    font-style: italic;
+    font-weight: bold;
+    font-size: $documentation_command_name_size;
+  }
+  .role_command_description {
+    margin-left: 24px;
+  }
+  .role_command_arguments {
+    list-style: none;
+    list-style-position: none;
+    padding-left: 0px;
+    margin-left: 12px;
+    margin-top: 0px;
+    margin-bottom: 0px;    
+    .role_command_argument_name {
+      font-weight: bold;
+      font-style: italic;
+    }
+    .role_command_argument_description {
+      margin-left: 24px;
+    }
+  }
+  .role_command_return {
+    margin-left: 12px;
+  }
+}
