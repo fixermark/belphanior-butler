@@ -106,10 +106,93 @@
     bottom: 0px;
     left: 0px; }
 
-#show_log_button {
+#console {
+  display: none;
   position: absolute;
   left: 0px;
-  bottom: 0px; }
+  right: 0px;
+  bottom: 0px;
+  height: 200px; }
+  #console .console_background {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    opacity: 0.4;
+    background-color: black; }
+  #console .console_boxes {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 40px;
+    margin: 0px;
+    padding: 0px;
+    height: 160px; }
+    #console .console_boxes .console_input_frame {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      right: 50%;
+      width: 50%;
+      height: 100%; }
+      #console .console_boxes .console_input_frame textarea {
+        border: 0px;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        right: 5px;
+        bottom: 5px;
+        padding: 5px;
+        overflow: scroll; }
+    #console .console_boxes .console_output_frame {
+      position: absolute;
+      left: 50%;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
+      width: 50%; }
+      #console .console_boxes .console_output_frame textarea {
+        border: 0px;
+        overflow: scroll;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        padding: 5px; }
+  #console .console_controls {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 40px; }
+    #console .console_controls #run_command_button {
+      position: absolute;
+      bottom: 5px;
+      left: 5px; }
+    #console .console_controls #hide_console_button {
+      position: absolute;
+      bottom: 5px;
+      right: 5px; }
+
+#controls {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px; }
+
+#show_log_button {
+  position: absolute;
+  left: 5px;
+  bottom: 5px; }
+
+#show_console_button {
+  position: absolute;
+  right: 5px;
+  bottom: 5px; }
 
 .role_list {
   position: fixed;

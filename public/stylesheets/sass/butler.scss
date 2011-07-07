@@ -1,6 +1,7 @@
 // Belphanior Butler styling
 @import "corners";
-
+$console_height: 200px;
+$console_button_bar_height: 40px;
 .form_dialog {
   border-top: 2px #4297d7 solid;
 //  padding: 5px;
@@ -129,10 +130,105 @@
   }
 }
 
-#show_log_button {
+#console {
+  display: none;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: $console_height;
+  .console_background {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    opacity: 0.4;
+    background-color: black;
+  }
+  .console_boxes {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: $console_button_bar_height;
+    margin: 0px;
+    padding: 0px;
+    height: $console_height - $console_button_bar_height;
+    .console_input_frame {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      right: 50%;
+      width: 50%;
+      height: 100%;
+      textarea {
+        border: 0px;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        right: 5px;
+        bottom: 5px;
+        padding: 5px;
+        overflow: scroll;
+      }
+    }
+    .console_output_frame {
+      position: absolute;
+      left: 50%;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
+      width: 50%;
+      textarea {
+        border: 0px;
+        overflow: scroll;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        padding: 5px;
+      }
+    }
+  }
+  .console_controls {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: $console_button_bar_height;
+    #run_command_button {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+    }
+    #hide_console_button {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+    }
+  }
+}
+
+#controls {
   position: absolute;
   left: 0px;
   bottom: 0px;
+  right: 0px;
+}
+
+#show_log_button {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+}
+
+#show_console_button {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
 }
 
 //// Documentation Styles ////

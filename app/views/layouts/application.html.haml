@@ -28,6 +28,10 @@
           .click(function () {Logger.show_log();});
         $("#hide_log_button").button()
           .click(function () {Logger.hide_log();});
+        $("#show_console_button").button()
+          .click(function () {$("#console").show();});
+        $("#hide_console_button").button()
+          .click(function () {$("#console").hide();});
         highlight_current_location_tab();
       });
   %body
@@ -42,10 +46,22 @@
 
     .content
       = yield
-    %button{:id=>"show_log_button"} Show Log
+    #controls
+      %button{:id=>"show_log_button"} Show Log
+      %button{:id=>"show_console_button"} Show Console
     #log
       .log_background
       .log_panel
         .log_frame
           %ul{:id=>"log_content"}
       %button{:id=>"hide_log_button"} Hide Log
+    #console
+      .console_background
+      .console_boxes
+        .console_input_frame
+          %textarea{:id=>"console_input"}
+        .console_output_frame
+          %textarea{:id=>"console_output"}
+      .console_controls  
+        %button{:id=>"run_command_button"} Run Command
+        %button{:id=>"hide_console_button"} Hide Console
