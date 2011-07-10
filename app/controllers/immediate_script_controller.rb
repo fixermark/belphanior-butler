@@ -1,0 +1,2 @@
+class ImmediateScriptController < ApplicationController
+end
