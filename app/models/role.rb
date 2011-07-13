@@ -8,8 +8,6 @@ class Role < ActiveRecord::Base
     self.model = json
   end
   def url=(new_url)
-    path = new_url.path
-    port = new_url.port
     write_attribute(:url, new_url.to_s)
   end
   def url
