@@ -20,7 +20,7 @@ class ServantTest < ActiveSupport::TestCase
     json_out = servant.to_json
     servant_hash = JSON.parse(json_out)
     assert_equal(servant_hash['name'], 'Foo')
-    assert_equal(servant_hash['url'], 'http://127.0.0.1:80')
+    assert_equal(servant_hash['url'], 'http://127.0.0.1')
     assert_equal(servant_hash['protocol'], "<some protocol string>")
     assert_equal(servant_hash['status'], "loading_roles")
 
@@ -30,7 +30,7 @@ class ServantTest < ActiveSupport::TestCase
     json_out = servant2.to_json
     servant_hash = JSON.parse(json_out)
     assert_equal(servant_hash['name'], 'Foo')
-    assert_equal(servant_hash['url'], 'http://127.0.0.1:80')
+    assert_equal(servant_hash['url'], 'http://127.0.0.1')
     assert_equal(servant_hash['status'], "loading_protocol")
   end
 
@@ -40,7 +40,7 @@ class ServantTest < ActiveSupport::TestCase
 
     servant = Servant.new_from_json(json)
     assert_equal(servant.name, "foo")
-    assert_equal(servant.url, "http://127.0.0.1")
+    assert_equal(servant.url.to_s, "http://127.0.0.1")
     assert_equal(servant.protocol, "<A protocol>")
 
     # partial deserialization

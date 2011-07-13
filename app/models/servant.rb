@@ -112,7 +112,7 @@ class Servant < ActiveRecord::Base
     # TODO(mtomczak): Finish implementation of logging.
     #   Log should be stored on the DB object.
     logger.error("Error reported for servant with URL " +
-                 self.url + ": " + err_msg)
+                 self.url.to_s + ": " + err_msg)
   end
   def self.new_from_json(json)
     result = self.new

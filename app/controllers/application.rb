@@ -7,6 +7,7 @@ class ScriptRunner
   class ServantLoadFailure < RuntimeError
   end
   class TellFailure < RuntimeError
+  end
   def initialize
     @servants_by_name={}
     # TODO(mtomczak): Init runners for all servants
@@ -22,7 +23,7 @@ class ScriptRunner
   def tell(params)
     servant_name = params[:servant]
     servant_role = params[:role]
-
+    
     if not @servants_by_name.has_key? servant_name then
       raise TellFailure, "No servant by name #servant_name."
     end
