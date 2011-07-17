@@ -6,7 +6,7 @@
 	url = git://github.com/allmarkedup/jQuery-URL-Parser.git
 [submodule "public/qunit"]
 	path = public/qunit
-	url = https://github.com/jquery/qunit.git
+	url = git://github.com/jquery/qunit.git
 [submodule "vendor/plugins/belphanior_script_tool"]
 	path = vendor/plugins/belphanior_script_tool
 	url = mtomczak@fixermark.com:~/git/belphanior_script_tool.git
