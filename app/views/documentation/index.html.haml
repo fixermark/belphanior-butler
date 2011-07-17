@@ -1,0 +1,35 @@
+:javascript
+  roles = []
+  roles_by_url = {}
+  function render_role_names() {
+    var role_name_list = $("#role_names");
+    for(i=0; i<roles.length; ++i) {
+      var role_description = 
+        "<li onclick='show_role_documentation(\""
+        + roles[i].url + "\")'>" + roles[i].name() + "</li>";
+      role_name_list.append(role_description);
+    }
+  }
+
+  function show_role_documentation(url) {
+    if (roles_by_url[url]) {
+      $(".role_panel").html(
+        roles_by_url[url].to_html());
+    }
+  }
+
+  $(function () {
+    render_role_names();
+  });
+
+-@roles.each do |role|
+  :javascript
+    var role = new Role(
+      '#{role["model"]}',
+      '#{role["url"]}');
+    roles_by_url[role.url] = role;
+    roles.push(role);
+
+.role_list
+  %ul{:id=>"role_names"}
+.role_panel
