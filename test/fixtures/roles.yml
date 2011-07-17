@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: charlie
+  url: http://example.com/charlie_url
+  model: '{ "name" : "charlie", "data" : "charlie data"}'
+
+two:
+  name: alpha
+  url: http://example.com/alpha_url
+  model: '{ "name" : "alpha", "data" : "alpha data"}'
