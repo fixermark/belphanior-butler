@@ -121,6 +121,16 @@
       });
   }
 
+  function clear_roles() {
+    servant_communicator.post(
+      "/servants/clear_role_cache",
+      "",
+      function () {
+        ShowError("Role cache cleared.");
+        update_servant_list();
+      });
+  }
+
   $(function () {
     $("#add_servant_dialog").hide();
     $("#add_servant_button").button().click(function () {
@@ -129,6 +139,9 @@
     });
     $("#commit_add_servant").button().click(function () {
       commit_add_servant();
+    });
+    $("#clear_roles_button").button().click(function () {
+      clear_roles();
     });
     update_servant_list();
   });
@@ -146,3 +159,5 @@
   
 
 %button{:id=>"add_servant_button"} Add Servant
+.servant_controls
+  %button{:id=>"clear_roles_button"} Clear Role Cache

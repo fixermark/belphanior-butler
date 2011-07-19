@@ -22,4 +22,8 @@ class ServantsController < ApplicationController
     respond_ok
   end
 
+  def clear_role_cache
+    Role.destroy_all()
+    respond_ok
+  end
 end
