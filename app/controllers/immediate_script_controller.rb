@@ -13,7 +13,7 @@ class ImmediateScriptController < ApplicationController
           1))
     rescue Exception => e
       response = "Evaluation failed: An error occurred.\n"
-      response << e.to_str + "\n"
+      response << e.to_str() << "\n"
       seen_immediate_script = false
       e.backtrace.each do |err_line|
         if err_line.start_with? "<Immediate script>" then
