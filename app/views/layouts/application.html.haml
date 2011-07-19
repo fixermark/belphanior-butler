@@ -28,6 +28,7 @@
         // Sends a command to the server in immediate mode
         // and posts the result back.
         var command_to_send = input_textbox.val();
+        output_textbox.val("Running command...");
 
         var communicator = new Ajax(function (response) {
           output_textbox.val(response["response"]);
