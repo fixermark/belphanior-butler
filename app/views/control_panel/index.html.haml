@@ -1,1 +1,28 @@
-Hello, world!
+:javascript
+  function edit_mode() {
+    $("#view_mode_panel").hide();
+    $("#edit_mode_panel").show();
+  }
+
+  function view_mode() {
+    $("#edit_mode_panel").hide();
+    $("#view_mode_panel").show();
+  }
+
+  $(function () {
+    $("#edit_mode_button").button()
+      .click(function () {edit_mode();});
+    $("#view_mode_button").button()
+      .click(function () {view_mode();});
+    view_mode();
+  });
+#command_buttons
+%hr
+#modal_control_panels
+  #view_mode_panel
+    %button{:id=>"edit_mode_button"} Edit
+  #edit_mode_panel
+    .instructions Click on a command button to edit it.
+    .edit_mode_buttons
+      %button{:id=>"view_mode_button"} View
+      %button{:id=>"new_command_button"} New Command
