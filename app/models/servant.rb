@@ -1,5 +1,4 @@
 require 'json'
-require 'uri'
 require 'logger'
 require 'uri'
 
