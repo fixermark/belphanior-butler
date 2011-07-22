@@ -83,8 +83,11 @@ class ApplicationController < ActionController::Base
     response.content_type = "application/JSON"
     render :json => data
   end
-  def respond_app_error(error_name)
+  def respond_app_error(error_name, message=nil)
     response.content_type = "application/JSON"
-    render :status => 500, :json => {"name" => error_name}
+    response = {"name" => error_name}
+    if message
+      response["message"] => message
+    render :status => 500, :json => response
   end
 end
