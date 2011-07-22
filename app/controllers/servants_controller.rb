@@ -2,7 +2,7 @@ class ServantsController < ApplicationController
   def add_servant
     new_servant = Servant.new_from_json(request.raw_post)
     if not new_servant.save
-      respond_app_error ("DuplicateRecord")
+      respond_app_error("DuplicateRecord")
     else
       respond_with_json(new_servant)
     end
