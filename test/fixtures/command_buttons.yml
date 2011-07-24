@@ -1,9 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
+  id: 1
   name: Do thing 1
   command: puts "Hello!"
 
 two:
+  id: 2
   name: Do thing 2
   command: puts "Hi!"
