@@ -13,12 +13,12 @@
       self.on_cancel();
     });
 
-    this.edit = function(save_callback, current_script) {
+    this.edit = function(save_callback, current_name, current_script) {
       // Edit a new button.
+      $("#name_input", this.edit_dialog).val(current_name);
+      $("#edit_input", this.edit_dialog).val(current_script);
+      $("#edit_output", this.edit_dialog).val("");
       this.save_callback = save_callback;
-      this.show_edit_dialog();
-    }
-    this.show_edit_dialog = function() {
       edit_dialog.show();
     }
     
@@ -28,7 +28,13 @@
     }
 
     this.on_save = function() {
-      this.close_dialog();
+      var self = this;
+      this.save_callback(
+        $("#name_input", this.edit_dialog).val(),
+        $("#edit_input", this.edit_dialog).val(),
+        function (data) {
+          self.close_dialog();
+        });
     }
 
     this.on_test = function() {
@@ -40,6 +46,7 @@
       this.close_dialog();
     }
   }
+
   function edit_mode() {
     $("#view_mode_panel").hide();
     $("#edit_mode_panel").show();
@@ -52,7 +59,17 @@
 
   function new_command() {
     var editor = new ButtonEditor($("#editor"));
-    editor.edit(function () {}, "");
+    editor.edit(function (name, command, on_success) {
+      default_communicator.post(
+        "/control_panel/add_command",
+        {
+          "name": name,
+          "command": command
+        },
+        on_success);
+    }, 
+    "", 
+    "");
   }
 
   $(function () {

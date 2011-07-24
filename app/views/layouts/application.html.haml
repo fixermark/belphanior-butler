@@ -12,6 +12,15 @@
     = javascript_include_tag "errorbar"
     = javascript_include_tag "role"
     :javascript
+      default_communicator = new Ajax(function (response) {
+        ShowError("default_success_callback triggered; success not handled.");
+        Logger.log("default_success_callback triggered; success not handled. Data was " + JSON.stringify(data));
+      }, 
+      function(error_description) {
+        ShowError(error_description.short_description);
+        Logger.log(error_description.long_description);
+      });
+
       function highlight_current_location_tab() {
         // applies highlighting to the tab that 
         // matches the path we're in
