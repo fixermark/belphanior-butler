@@ -87,28 +87,33 @@ $console_button_bar_height: 40px;
   }
 }
 
-#log {
+.dialog {
   display: none;
-  .log_background {
+  .background {
+    display: block;
     position: absolute;
     left: 0px;
     top: 0px;
     right: 0px;
     bottom: 0px;
-    opacity: .4;
+    opacity: 0.4;
     background-color: black;
   }
-  .log_panel {
+  .panel {
     display: block;
     position: absolute;
     left: 30px;
-    top: 30px;
     right: 30px;
+    top: 30px;
     bottom: 30px;
-    padding: 10px;
     opacity: 1;
-    background-color: white;
     z-index: 5;
+  }
+}
+
+#log {
+  .log_panel {
+    background-color: white;
     .log_frame {
       display: block;
       position: absolute;
@@ -131,21 +136,11 @@ $console_button_bar_height: 40px;
 }
 
 #console {
-  display: none;
+  height: $console_height;
   position: absolute;
+  bottom: 0px;
   left: 0px;
   right: 0px;
-  bottom: 0px;
-  height: $console_height;
-  .console_background {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;
-    opacity: 0.4;
-    background-color: black;
-  }
   .console_boxes {
     position: absolute;
     left: 0px;

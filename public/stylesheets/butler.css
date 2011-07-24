@@ -69,58 +69,51 @@
     #servant_list .servant_entry .controls {
       display: table-cell; }
 
-#log {
+.dialog {
   display: none; }
-  #log .log_background {
+  .dialog .background {
+    display: block;
     position: absolute;
     left: 0px;
     top: 0px;
     right: 0px;
     bottom: 0px;
-    opacity: .4;
+    opacity: 0.4;
     background-color: black; }
-  #log .log_panel {
+  .dialog .panel {
     display: block;
     position: absolute;
     left: 30px;
-    top: 30px;
     right: 30px;
+    top: 30px;
     bottom: 30px;
-    padding: 10px;
     opacity: 1;
-    background-color: white;
     z-index: 5; }
-    #log .log_panel .log_frame {
-      display: block;
-      position: absolute;
-      left: 10px;
-      right: 10px;
-      top: 10px;
-      bottom: 30px; }
-      #log .log_panel .log_frame #log_content {
-        display: block;
-        overflow: scroll;
-        height: 100%; }
-  #log #hide_log_button {
+
+#log .log_panel {
+  background-color: white; }
+  #log .log_panel .log_frame {
+    display: block;
     position: absolute;
-    bottom: 0px;
-    left: 0px; }
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    bottom: 30px; }
+    #log .log_panel .log_frame #log_content {
+      display: block;
+      overflow: scroll;
+      height: 100%; }
+#log #hide_log_button {
+  position: absolute;
+  bottom: 0px;
+  left: 0px; }
 
 #console {
-  display: none;
+  height: 200px;
   position: absolute;
-  left: 0px;
-  right: 0px;
   bottom: 0px;
-  height: 200px; }
-  #console .console_background {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;
-    opacity: 0.4;
-    background-color: black; }
+  left: 0px;
+  right: 0px; }
   #console .console_boxes {
     position: absolute;
     left: 0px;

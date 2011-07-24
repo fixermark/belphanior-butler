@@ -72,15 +72,15 @@
     #controls
       %button{:id=>"show_log_button"} Show Log
       %button{:id=>"show_console_button"} Show Console
-    #log
-      .log_background
-      .log_panel
+    #log{:class=>"dialog"}
+      .background
+      .log_panel{:class=>"panel"}
         .log_frame
           %ul{:id=>"log_content"}
       %button{:id=>"hide_log_button"} Hide Log
-    #console
-      .console_background
-      .console_boxes
+    #console{:class=>"dialog"}
+      .background
+      .console_boxes{:class=>"panel"}
         .console_input_frame
           %textarea{:id=>"console_input"}
         .console_output_frame
