@@ -87,7 +87,8 @@ class ApplicationController < ActionController::Base
     response.content_type = "application/JSON"
     response = {"name" => error_name}
     if message
-      response["message"] => message
+      response["message"] = message
+    end
     render :status => 500, :json => response
   end
 end
