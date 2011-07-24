@@ -8,7 +8,7 @@ class Servant < ActiveRecord::Base
   def to_json(*a)
     {
       'name' => self.name,
-      'url' => self.url,
+      'url' => self.url.to_s,
       'protocol' => self.protocol,
       'status' => self.status
     }.to_json(*a)
