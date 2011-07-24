@@ -253,11 +253,23 @@
   z-index: 6; }
 #editor .panel {
   z-index: 7; }
-#editor .io_boxes {
+#editor .name_input {
   position: absolute;
   left: 0px;
   right: 0px;
   top: 0px;
+  height: 40px; }
+  #editor .name_input input {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    top: 5px;
+    bottom: 5px; }
+#editor .io_boxes {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 40px;
   bottom: 20px;
   margin: 0px;
   padding: 0px; }

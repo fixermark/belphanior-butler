@@ -314,6 +314,7 @@ $documentation_command_name_size: 20px;
 
 //// Button Editor Styles ////
 $button_bar_height: 20px;
+$name_input_height: 40px;
 #editor {
    .background {
     z-index: 6;
@@ -321,11 +322,25 @@ $button_bar_height: 20px;
    .panel {
      z-index: 7;
    }
-  .io_boxes {
+  .name_input {
     position: absolute;
     left: 0px;
     right: 0px;
     top: 0px;
+    height: $name_input_height;
+    input {
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
+    }
+  }
+  .io_boxes {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: $name_input_height;
     bottom: $button_bar_height;
     margin: 0px;
     padding: 0px;
