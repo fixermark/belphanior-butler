@@ -226,6 +226,8 @@ $console_button_bar_height: 40px;
   bottom: 5px;
 }
 
+
+
 //// Documentation Styles ////
 
 $documentation_left_nav_size: 180px;
@@ -309,3 +311,69 @@ $documentation_command_name_size: 20px;
     margin-left: 12px;
   }
 }
+
+//// Button Editor Styles ////
+$button_bar_height: 20px;
+#editor {
+   .background {
+    z-index: 6;
+   }
+   .panel {
+     z-index: 7;
+   }
+  .io_boxes {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: $button_bar_height;
+    margin: 0px;
+    padding: 0px;
+    .input_frame {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      height: 50%;
+      textarea {
+        border: 0px;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        right: 5px;
+        bottom: 5px;
+        padding: 5px;
+        overflow: scroll;
+      }
+    }
+    .output_frame {
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      right: 0px;
+      height: 50%;
+      textarea {
+        border: 0px;
+        overflow: scroll;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        padding: 5px;
+      }
+    }
+  }
+  .controls {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: $button_bar_height;
+    padding: 2px;
+    button {
+      margin-left: 2px;
+    }
+  }
+}
+

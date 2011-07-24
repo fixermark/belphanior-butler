@@ -1,4 +1,45 @@
 :javascript
+  function ButtonEditor(edit_dialog) {
+    this.save_callback = null;
+    this.edit_dialog = edit_dialog;
+    var self = this;
+    $("#save_button", this.edit_dialog).click(function() {
+      self.on_save();
+    });
+    $("#test_button", this.edit_dialog).click(function() {
+      self.on_test();
+    });
+    $("#cancel_button", this.edit_dialog).click(function() {
+      self.on_cancel();
+    });
+
+    this.edit = function(save_callback, current_script) {
+      // Edit a new button.
+      this.save_callback = save_callback;
+      this.show_edit_dialog();
+    }
+    this.show_edit_dialog = function() {
+      edit_dialog.show();
+    }
+    
+    this.close_dialog = function() {
+      // TODO(mtomczak): Unbind buttons.
+      edit_dialog.hide();
+    }
+
+    this.on_save = function() {
+      this.close_dialog();
+    }
+
+    this.on_test = function() {
+      run_command($("#edit_input", this.edit_dialog),
+                  $("#edit_output", this.edit_dialog));
+    }
+
+    this.on_cancel = function () {
+      this.close_dialog();
+    }
+  }
   function edit_mode() {
     $("#view_mode_panel").hide();
     $("#edit_mode_panel").show();
@@ -9,13 +50,24 @@
     $("#view_mode_panel").show();
   }
 
+  function new_command() {
+    var editor = new ButtonEditor($("#editor"));
+    editor.edit(function () {}, "");
+  }
+
   $(function () {
     $("#edit_mode_button").button()
       .click(function () {edit_mode();});
     $("#view_mode_button").button()
       .click(function () {view_mode();});
+    $("#new_command_button").button()
+      .click(function () {new_command();});
+    $("#save_button").button();
+    $("#test_button").button();
+    $("#cancel_button").button();
     view_mode();
   });
+
 #command_buttons
 %hr
 #modal_control_panels
@@ -26,3 +78,16 @@
     .edit_mode_buttons
       %button{:id=>"view_mode_button"} View
       %button{:id=>"new_command_button"} New Command
+
+#editor{:class=>"dialog"}
+  .background
+  .panel
+    .io_boxes
+      .input_frame
+        %textarea{:id=>"edit_input"}
+      .output_frame
+        %textarea{:id=>"edit_output", :readonly=>"true"}
+    .controls
+      %button{:id=>"save_button"} Save
+      %button{:id=>"test_button"} Test
+      %button{:id=>"cancel_button"} Cancel

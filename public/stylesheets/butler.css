@@ -248,3 +248,55 @@
       margin-left: 24px; }
   .role_command .role_command_return {
     margin-left: 12px; }
+
+#editor .background {
+  z-index: 6; }
+#editor .panel {
+  z-index: 7; }
+#editor .io_boxes {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 20px;
+  margin: 0px;
+  padding: 0px; }
+  #editor .io_boxes .input_frame {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    height: 50%; }
+    #editor .io_boxes .input_frame textarea {
+      border: 0px;
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      right: 5px;
+      bottom: 5px;
+      padding: 5px;
+      overflow: scroll; }
+  #editor .io_boxes .output_frame {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    height: 50%; }
+    #editor .io_boxes .output_frame textarea {
+      border: 0px;
+      overflow: scroll;
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
+      padding: 5px; }
+#editor .controls {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: 20px;
+  padding: 2px; }
+  #editor .controls button {
+    margin-left: 2px; }
