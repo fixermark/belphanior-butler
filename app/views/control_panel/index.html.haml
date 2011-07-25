@@ -1,4 +1,7 @@
 :javascript
+  g_command_buttons={};
+  g_mode = "view";
+
   function ButtonEditor(edit_dialog) {
     this.save_callback = null;
     this.edit_dialog = edit_dialog;
@@ -47,14 +50,57 @@
     }
   }
 
+  function update_commands() {
+    default_communicator.get("/control_panel/get_commands",
+      function (data) {
+        g_command_buttons = {};
+        add_ui_buttons(data);
+      });
+  }
+
+  function get_id_number(id_string, prefix_string) {
+    return id_string.substring(prefix_string.length);
+  }
+
+  function enable_ui_buttons() {
+    if (g_mode == "view") {
+      $("#command_buttons button").each( function (i, v) {
+        var button = $(v);
+        var button_id = ""+i; // TODO: Fix this; need to know the 'id' command in jquery --- get_id_number(button.id(), "command_button_");
+        button.click(function () {
+          run_command_text(
+            g_command_buttons[button_id]["command"],
+            function (result) {
+              Logger.log(result);
+            });
+        });
+      });
+    }
+  }
+
+  function add_ui_buttons(buttons) {
+    var button_list_html = "";
+    $.each(buttons, function(i, v) {
+      g_command_buttons[""+i] = v;
+      button_list_html += "<button id='command_button_" 
+                          + i + "'>" + v["name"] 
+                          + "</button>";
+    });
+    $("#command_buttons").html(button_list_html);
+    $("#command_buttons button").button();
+    enable_ui_buttons();
+  }
+
   function edit_mode() {
     $("#view_mode_panel").hide();
     $("#edit_mode_panel").show();
+    g_mode = "edit";
   }
 
   function view_mode() {
     $("#edit_mode_panel").hide();
     $("#view_mode_panel").show();
+    g_mode = "view";
   }
 
   function new_command() {
@@ -83,6 +129,7 @@
     $("#test_button").button();
     $("#cancel_button").button();
     view_mode();
+    update_commands();
   });
 
 #command_buttons
