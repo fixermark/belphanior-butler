@@ -1,6 +1,7 @@
 :javascript
   g_command_buttons={};
   g_mode = "view";
+  kButtonIdPrefix = "command_button_";
 
   function ButtonEditor(edit_dialog) {
     this.save_callback = null;
@@ -26,7 +27,7 @@
     }
     
     this.close_dialog = function() {
-      // TODO(mtomczak): Unbind buttons.
+      $("#command_buttons button").unbind('click');
       edit_dialog.hide();
     }
 
@@ -58,15 +59,12 @@
       });
   }
 
-  function get_id_number(id_string, prefix_string) {
-    return id_string.substring(prefix_string.length);
-  }
-
   function enable_ui_buttons() {
+    $("command_buttons button").unbind('click');
     if (g_mode == "view") {
       $("#command_buttons button").each( function (i, v) {
         var button = $(v);
-        var button_id = ""+i; // TODO: Fix this; need to know the 'id' command in jquery --- get_id_number(button.id(), "command_button_");
+        var button_id = button.attr('id');
         button.click(function () {
           run_command_text(
             g_command_buttons[button_id]["command"],
@@ -75,17 +73,39 @@
             });
         });
       });
+    } else { //g_mode == "edit"
+      $("#command_buttons button").each( function (i, v) {
+        var button = $(v);
+        var button_id = button.attr('id');
+        var button_data = g_command_buttons[button_id];
+        button.click(function () {
+          var editor = new ButtonEditor($("#editor"));
+          editor.edit(function (name, command, on_success) {
+            default_communicator.post(
+              "/control_panel/update_command",
+              {
+                "id": button_data['id'],
+                "name": name,
+                "command": command
+              },
+              on_success);
+            }, 
+            "", 
+            "");          
+        });
+      });
     }
   }
 
-  function add_ui_buttons(buttons) {
+  function add_ui_buttons(button_data) {
     var button_list_html = "";
-    $.each(buttons, function(i, v) {
-      g_command_buttons[""+i] = v;
-      button_list_html += "<button id='command_button_" 
-                          + i + "'>" + v["name"] 
+    $.each(button_data, function(i, v) {
+      var button_id = kButtonIdPrefix + i;
+      g_command_buttons[button_id] = v;
+      button_list_html += "<button id='" + button_id
+                          + "'>" + v["name"] 
                           + "</button>";
-    });
+      });
     $("#command_buttons").html(button_list_html);
     $("#command_buttons button").button();
     enable_ui_buttons();
