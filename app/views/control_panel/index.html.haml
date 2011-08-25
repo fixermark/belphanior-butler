@@ -1,8 +1,17 @@
 :javascript
+  // Map from the IDs of the UI buttons to the underlying
+  // data describing how they behave (loaded from the server).
   g_command_buttons={};
+  // Operational mode, either "view" or "edit."
   g_mode = "view";
+  // Each UI button has an ID of the form
+  // kButtonIdPrefix + <button id number>.
   kButtonIdPrefix = "command_button_";
 
+  // Class that manages the button editor dialog.
+  // Constructor accepts the top-level node of the dialog
+  // as an argument and attaches behaviors to the nodes
+  // as needed.
   function ButtonEditor(edit_dialog) {
     this.save_callback = null;
     this.edit_dialog = edit_dialog;
@@ -17,6 +26,15 @@
       self.on_cancel();
     });
 
+    // Opens the dialog with the specified data.
+    // Arguments
+    //   save_callback: The callback function to be
+    //    executed when evaluation is done. Accepts the
+    //    button name, the button script, and a callback
+    //    to trigger when the save callback is complated.
+    //   current_name: The name of the button.
+    //   current_script: The scripted behavior attached
+    //    to the button.
     this.edit = function(save_callback, current_name, current_script) {
       // Edit a new button.
       $("#name_input", this.edit_dialog).val(current_name);
@@ -26,11 +44,13 @@
       edit_dialog.show();
     }
     
+    // Closes the dialog without saving changes.
     this.close_dialog = function() {
       $("#command_buttons button").unbind('click');
       edit_dialog.hide();
     }
 
+    // Runs save callback.
     this.on_save = function() {
       var self = this;
       this.save_callback(
@@ -41,16 +61,22 @@
         });
     }
 
+    // Test-runs the script in #edit_input, piping results
+    // to #edit_output.
     this.on_test = function() {
       run_command($("#edit_input", this.edit_dialog),
                   $("#edit_output", this.edit_dialog));
     }
 
+    // Cancel button handler.
     this.on_cancel = function () {
       this.close_dialog();
     }
   }
 
+  // Loads the commands from the server, creating buttons
+  // for each command and populating g_command_buttons
+  // with the button information for each command. 
   function update_commands() {
     default_communicator.get("/control_panel/get_commands",
       function (data) {
