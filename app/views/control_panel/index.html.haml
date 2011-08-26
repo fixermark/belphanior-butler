@@ -85,6 +85,11 @@
       });
   }
 
+  // Applies behavior to all of the UI buttons based upon
+  // current operational mode. 
+  // view mode: clicking a button performs the attached task
+  // edit mode: clicking a button allows name and task 
+  //  editing
   function enable_ui_buttons() {
     $("command_buttons button").unbind('click');
     if (g_mode == "view") {
@@ -123,6 +128,8 @@
     }
   }
 
+  // Attaches buttons to the view from the server-supplied
+  // data and enables them as per the current mode.
   function add_ui_buttons(button_data) {
     var button_list_html = "";
     $.each(button_data, function(i, v) {
@@ -137,18 +144,21 @@
     enable_ui_buttons();
   }
 
+  // Switches to edit mode.
   function edit_mode() {
     $("#view_mode_panel").hide();
     $("#edit_mode_panel").show();
     g_mode = "edit";
   }
-
+  
+  // Switches to view mode.
   function view_mode() {
     $("#edit_mode_panel").hide();
     $("#view_mode_panel").show();
     g_mode = "view";
   }
 
+  // Handler for new command button.
   function new_command() {
     var editor = new ButtonEditor($("#editor"));
     editor.edit(function (name, command, on_success) {
