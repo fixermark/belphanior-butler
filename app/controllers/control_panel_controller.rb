@@ -21,12 +21,12 @@ class ControlPanelController < ApplicationController
     command = CommandButton.find(command_data['id'])
     if not command
       return respond_app_error("UnknownCommand", 
-        "Could not find command button with id #{command_data.id}")
+        "Could not find command button with id #{command_data['id']}")
     end
     command.from_json(command_raw)
     if not command.save
       return respond_app_error("CommandSaveFailed", 
-        "Could not save command button with id #{command_data.id}")
+        "Could not save command button with id #{command_data['id']}")
     end
     respond_with_json command
   end

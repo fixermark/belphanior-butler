@@ -56,8 +56,8 @@
     
     // Closes the dialog without saving changes.
     this.close_dialog = function() {
-      $("#command_buttons button").unbind('click');
-      edit_dialog.hide();
+      $(".controls button", this.edit_dialog).unbind('click');
+      this.edit_dialog.hide();
     }
 
     // Runs save callback.
