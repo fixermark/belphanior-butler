@@ -18,7 +18,7 @@ class ControlPanelController < ApplicationController
   def update_command
     command_raw = request.raw_post
     command_data = JSON.parse(command_raw)
-    command = CommandButton.find(:id => command_data.id)
+    command = CommandButton.find(command_data['id'])
     if not command
       return respond_app_error("UnknownCommand", 
         "Could not find command button with id #{command_data.id}")
