@@ -19,6 +19,9 @@
     $("#save_button", this.edit_dialog).click(function() {
       self.on_save();
     });
+    $("#delete_button", this.edit_dialog).click(function() {
+      self.on_delete();
+    });
     $("#test_button", this.edit_dialog).click(function() {
       self.on_test();
     });
@@ -35,12 +38,19 @@
     //   current_name: The name of the button.
     //   current_script: The scripted behavior attached
     //    to the button.
-    this.edit = function(save_callback, current_name, current_script) {
+    this.edit = function(save_callback, delete_callback, 
+                         current_name, current_script) {
       // Edit a new button.
       $("#name_input", this.edit_dialog).val(current_name);
       $("#edit_input", this.edit_dialog).val(current_script);
       $("#edit_output", this.edit_dialog).val("");
       this.save_callback = save_callback;
+      this.delete_callback = delete_callback;
+      if (this.delete_callback==null) {
+        $("#delete_button", this.edit_dialog).hide();
+      } else {
+        $("#delete_button", this.edit_dialog).show();
+      }
       edit_dialog.show();
     }
     
@@ -56,9 +66,17 @@
       this.save_callback(
         $("#name_input", this.edit_dialog).val(),
         $("#edit_input", this.edit_dialog).val(),
-        function (data) {
+        function () {
           self.close_dialog();
         });
+    }
+    
+    this.on_delete = function() {
+      if (this.delete_callback != null) {
+        this.delete_callback(function () {
+          self.close_dialog();
+        });
+      }
     }
 
     // Test-runs the script in #edit_input, piping results
@@ -111,18 +129,33 @@
         var button_data = g_command_buttons[button_id];
         button.click(function () {
           var editor = new ButtonEditor($("#editor"));
-          editor.edit(function (name, command, on_success) {
-            default_communicator.post(
-              "/control_panel/update_command",
-              {
-                "id": button_data['id'],
-                "name": name,
-                "command": command
-              },
-              on_success);
-            }, 
-            "", 
-            "");          
+          editor.edit(
+            function (name, command, on_success) {
+              default_communicator.post(
+                "/control_panel/update_command",
+                {
+                  "id": button_data['id'],
+                  "name": name,
+                  "command": command
+                },
+                function (data) {
+                  update_commands();
+                  on_success();
+                });
+              }, 
+            function (on_success) {
+              default_communicator.post(
+                "/control_panel/delete_command",
+                {
+                  "id": button_data['id']
+                },
+                function (data) {
+                  update_commands();
+                  on_success();
+                });
+            },
+            button_data['name'], 
+            button_data['command']);          
         });
       });
     }
@@ -131,6 +164,7 @@
   // Attaches buttons to the view from the server-supplied
   // data and enables them as per the current mode.
   function add_ui_buttons(button_data) {
+    $("#command_buttons").html("");
     var button_list_html = "";
     $.each(button_data, function(i, v) {
       var button_id = kButtonIdPrefix + i;
@@ -149,6 +183,7 @@
     $("#view_mode_panel").hide();
     $("#edit_mode_panel").show();
     g_mode = "edit";
+    update_commands();
   }
   
   // Switches to view mode.
@@ -156,6 +191,7 @@
     $("#edit_mode_panel").hide();
     $("#view_mode_panel").show();
     g_mode = "view";
+    update_commands();
   }
 
   // Handler for new command button.
@@ -168,8 +204,12 @@
           "name": name,
           "command": command
         },
-        on_success);
+        function (data) {
+          update_commands();
+          on_success();
+        });
     }, 
+    null,
     "", 
     "");
   }
@@ -182,10 +222,10 @@
     $("#new_command_button").button()
       .click(function () {new_command();});
     $("#save_button").button();
+    $("#delete_button").button();
     $("#test_button").button();
     $("#cancel_button").button();
     view_mode();
-    update_commands();
   });
 
 #command_buttons
@@ -211,5 +251,6 @@
         %textarea{:id=>"edit_output", :readonly=>"true"}
     .controls
       %button{:id=>"save_button"} Save
+      %button{:id=>"delete_button"} Delete
       %button{:id=>"test_button"} Test
       %button{:id=>"cancel_button"} Cancel
