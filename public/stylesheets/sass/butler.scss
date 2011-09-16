@@ -392,3 +392,12 @@ $name_input_height: 40px;
   }
 }
 
+//// Control panel styles ////
+
+#command_buttons {
+  button {
+    min-width: 33%;
+    min-height: 33%;
+    padding: 5px;
+  }
+}
