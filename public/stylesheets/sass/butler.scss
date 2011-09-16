@@ -397,7 +397,8 @@ $name_input_height: 40px;
 #command_buttons {
   button {
     min-width: 33%;
-    min-height: 33%;
+    min-height: 150px;
+    font-size: 18pt;
     padding: 5px;
   }
 }
