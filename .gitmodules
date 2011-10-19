@@ -1,0 +1,6 @@
+[submodule "app/assets/javascripts/jquery-url-parser"]
+	path = app/assets/javascripts/jquery-url-parser
+	url = git://github.com/allmarkedup/jQuery-URL-Parser.git
+[submodule "public/qunit"]
+	path = public/qunit
+	url = git://github.com/jquery/qunit.git
