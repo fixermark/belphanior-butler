@@ -1,6 +1,7 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
+require 'rubygems'
 require 'belphanior/servant_caller'
 
 class ScriptRunner
@@ -16,7 +17,7 @@ class ScriptRunner
     # Provide a context in which to run an anonymous script
     binding
   end
-  
+
   def servant_by_name(name)
     if not @servants_by_name.has_key? name then
       cache_servant_caller(name)
@@ -27,12 +28,12 @@ class ScriptRunner
   def tell(params)
     servant_name = params[:servant]
     servant_role = params[:role]
-    
+
     servant = servant_by_name(servant_name)
     if not servant then
       raise ServantLoadFailure, "Servant with name '#{servant_name}' was nil."
     end
-    
+
     yield servant.get_context_by_name(servant_role)
   end
 
@@ -54,13 +55,13 @@ class ScriptRunner
         roles_by_url[url.to_s]=JSON.parse(role.model)
       end
     end
-    
+
     servant_caller = Belphanior::ServantCaller.new(
-      RAILS_DEFAULT_LOGGER, 
+      RAILS_DEFAULT_LOGGER,
       servant.url.to_s,
       JSON.parse(servant.protocol),
       roles_by_url)
-    @servants_by_name[name]=servant_caller      
+    @servants_by_name[name]=servant_caller
   end
 end
 
@@ -70,10 +71,10 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '4b255128bb6ff0b74fbd1cd1035aa234'
-  
-  # See ActionController::Base for details 
+
+  # See ActionController::Base for details
   # Uncomment this to filter the contents of submitted sensitive data parameters
-  # from your application log (in this case, all fields with names like "password"). 
+  # from your application log (in this case, all fields with names like "password").
   # filter_parameter_logging :password
   def respond_ok
     response.content_type = "application/JSON"

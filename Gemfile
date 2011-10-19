@@ -16,9 +16,13 @@ group :assets do
   gem 'coffee-rails', '~> 3.1.1'
   gem 'therubyracer'
   gem 'uglifier', '>= 1.0.3'
+  gem 'haml-rails'
 end
 
 gem 'jquery-rails'
+
+# Belphanior gems
+gem 'belphanior-script-tool'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
