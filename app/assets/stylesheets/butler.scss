@@ -1,0 +1,404 @@
+// Belphanior Butler styling
+@import "corners";
+$console_height: 200px;
+$console_button_bar_height: 40px;
+.form_dialog {
+  border-top: 2px #4297d7 solid;
+//  padding: 5px;
+  input {
+    width: 90%;
+  }
+}
+
+#errorbar {
+  @include round-corners(5px);
+  font-weight: bold;
+  color: white;
+  background-color: #FF6666;
+  margin: {
+    top: 5px;
+    bottom: 5px;
+    left: 3px;
+    right: 3px;
+  }
+  padding: 10px;
+  display: none;
+  .closebox {
+    background-color: inherit;
+    margin-right: 5px;
+    @include round-corners(5px);
+  }
+  .errormsg {
+    display: inline;
+  }
+}
+
+#servant_list {
+  display: table;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
+  width: auto;
+  position: relative;
+  .servant_head {
+    display: table-row;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    .name_head {
+      display: table-cell;
+      width: 300px;
+      font-weight: bold;
+    }
+    .url_head {
+      width: 300px;
+      display: table-cell;
+      font-weight: bold;
+     }
+     .status_head {
+       width: 100px;
+       display: table-cell;
+       font-weight: bold;
+     }
+  }
+  .servant_entry {
+    display: table-row;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    .name {
+      width: 300px;
+      display: table-cell;
+    }
+    .url {
+      width: 300px;
+      display: table-cell;
+    }
+    .status {
+      width: 100px;
+      display: table-cell;
+    }
+    .controls {
+      display: table-cell;
+    }
+  }
+}
+
+.dialog {
+  display: none;
+  .background {
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    opacity: 0.4;
+    background-color: black;
+  }
+  .panel {
+    display: block;
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    top: 30px;
+    bottom: 30px;
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+#log {
+  .log_panel {
+    background-color: white;
+    .log_frame {
+      display: block;
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      bottom: 30px;
+      #log_content {
+        display: block;
+        overflow: scroll;
+        height: 100%;
+      }
+    }
+  }
+  #hide_log_button {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+}
+
+#console {
+  height: $console_height;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  .console_boxes {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: $console_button_bar_height;
+    margin: 0px;
+    padding: 0px;
+    height: $console_height - $console_button_bar_height;
+    .console_input_frame {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      right: 50%;
+      width: 50%;
+      height: 100%;
+      textarea {
+        border: 0px;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        right: 5px;
+        bottom: 5px;
+        padding: 5px;
+        overflow: scroll;
+      }
+    }
+    .console_output_frame {
+      position: absolute;
+      left: 50%;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
+      width: 50%;
+      textarea {
+        border: 0px;
+        overflow: scroll;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        padding: 5px;
+      }
+    }
+  }
+  .console_controls {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: $console_button_bar_height;
+    #run_command_button {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+    }
+    #hide_console_button {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+    }
+  }
+}
+
+#controls {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+}
+
+#show_log_button {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+}
+
+#show_console_button {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
+
+
+
+//// Documentation Styles ////
+
+$documentation_left_nav_size: 180px;
+$documentation_heading_size: 32px;
+$documentation_subheading_size: 24px;
+$documentation_command_name_size: 20px;
+
+.role_list {
+  position: fixed;
+  min-width: $documentation_left_nav_size;
+  min-height: 100%;
+  margin-top: 0px;
+  mergin-bottom: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-right: 2px blue solid;
+  float: left;
+  li {
+    font-style: italic;
+    list-style: none;
+    font-size: 16px;
+  }
+  .selected {
+    font-weight: bold;
+  }
+}
+
+.role_panel {
+  margin-left: $documentation_left_nav_size + 5px;
+}
+
+.role_name {
+  font-size: $documentation_heading_size;
+  font-weight: bold;
+}
+
+.role_description {
+  margin-left: 24px;
+}
+
+.role_header {
+  font-style: italic;
+  font-weight: bold;
+  font-size: $documentation_subheading_size;
+  margin-top: 24px;
+}
+
+.role_subheader {
+  font-style: italic;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.role_command {
+  margin-top: 20px;
+  border-top: 2px solid;
+  .role_command_name {
+    font-style: italic;
+    font-weight: bold;
+    font-size: $documentation_command_name_size;
+  }
+  .role_command_description {
+    margin-left: 24px;
+  }
+  .role_command_arguments {
+    list-style: none;
+    list-style-position: none;
+    padding-left: 0px;
+    margin-left: 12px;
+    margin-top: 0px;
+    margin-bottom: 0px;    
+    .role_command_argument_name {
+      font-weight: bold;
+      font-style: italic;
+    }
+    .role_command_argument_description {
+      margin-left: 24px;
+    }
+  }
+  .role_command_return {
+    margin-left: 12px;
+  }
+}
+
+//// Button Editor Styles ////
+$button_bar_height: 20px;
+$name_input_height: 40px;
+#editor {
+   .background {
+    z-index: 6;
+   }
+   .panel {
+     z-index: 7;
+   }
+  .name_input {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: $name_input_height;
+    input {
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
+    }
+  }
+  .io_boxes {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: $name_input_height;
+    bottom: $button_bar_height;
+    margin: 0px;
+    padding: 0px;
+    .input_frame {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      height: 50%;
+      textarea {
+        border: 0px;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        right: 5px;
+        bottom: 5px;
+        padding: 5px;
+        overflow: scroll;
+      }
+    }
+    .output_frame {
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      right: 0px;
+      height: 50%;
+      textarea {
+        border: 0px;
+        overflow: scroll;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        padding: 5px;
+      }
+    }
+  }
+  .controls {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: $button_bar_height;
+    padding: 2px;
+    button {
+      margin-left: 2px;
+    }
+  }
+}
+
+//// Control panel styles ////
+
+#command_buttons {
+  button {
+    min-width: 33%;
+    min-height: 150px;
+    font-size: 18pt;
+    padding: 5px;
+  }
+}
