@@ -19,6 +19,7 @@ group :assets do
   gem 'haml-rails'
 end
 
+gem 'backgroundrb-rails3', '~> 1.1.5'
 gem 'jquery-rails'
 
 # Belphanior gems

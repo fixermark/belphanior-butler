@@ -30,8 +30,13 @@ GEM
     activesupport (3.1.1)
       multi_json (~> 1.0)
     arel (2.2.1)
+    backgroundrb-rails3 (1.1.5)
+      chronic (>= 0.2.3)
+      packet (>= 0.1.15)
+      rails (>= 3.0.0)
     belphanior-script-tool (0.1.0)
     builder (3.0.0)
+    chronic (0.6.4)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
       railties (~> 3.1.0)
@@ -61,6 +66,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     multi_json (1.0.3)
+    packet (0.1.15)
     polyglot (0.3.2)
     rack (1.3.4)
     rack-cache (1.1)
@@ -117,6 +123,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  backgroundrb-rails3 (~> 1.1.5)
   belphanior-script-tool
   coffee-rails (~> 3.1.1)
   haml-rails
