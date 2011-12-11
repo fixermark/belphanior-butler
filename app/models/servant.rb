@@ -5,13 +5,13 @@ require 'uri'
 class Servant < ActiveRecord::Base
   validates_uniqueness_of :name
 
-  def to_json(*a)
+  def as_json(*a)
     {
       'name' => self.name,
-      'url' => self.url.to_s,
+      'url' => read_attribute(:url),
       'protocol' => self.protocol,
-      'status' => self.status
-    }.to_json(*a)
+      'status' => self.status,
+    }
   end
 
   def from_json(json)
@@ -84,10 +84,10 @@ class Servant < ActiveRecord::Base
       return nil
     end
   end
-  
+
   def roles
     # Returns the roles associated with this protocol
-    # (as an array), or nil if the roles do not exist 
+    # (as an array), or nil if the roles do not exist
     # (or cannot be loaded).
     #
     # The returned array has a Role object for each role,
