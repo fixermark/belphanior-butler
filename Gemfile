@@ -14,7 +14,8 @@ gem 'json'
 group :assets do
   gem 'sass-rails',   '~> 3.1.4'
   gem 'coffee-rails', '~> 3.1.1'
-  gem 'therubyracer'
+  gem 'johnson'
+  #gem 'therubyracer' # TOOD(mtomczak): Need a new js runtime
   gem 'uglifier', '>= 1.0.3'
   gem 'haml-rails'
 end
