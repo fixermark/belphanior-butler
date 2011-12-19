@@ -57,7 +57,7 @@ class ScriptRunner
     end
 
     servant_caller = Belphanior::ServantCaller.new(
-      RAILS_DEFAULT_LOGGER,
+      Rails.logger,
       servant.url.to_s,
       JSON.parse(servant.protocol),
       roles_by_url)
