@@ -1,0 +1,10 @@
+Manual start:
+
+git submodule update --init
+# or, git submodule init, tweak .git/config, and
+# git submodule update
+rake db:migrate
+script/backgroundrb start
+script/rails server
+
+# Then, connect to http://<server address>:3000/unittest to verify configuration
