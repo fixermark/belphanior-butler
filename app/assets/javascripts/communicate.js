@@ -11,7 +11,7 @@ function AjaxError(error_class, short_description, long_description) {
 }
 
 // Sends a query to the server with JSON. On success, provided callback
-// method is executed with the response JSON as an argument. If a non-200 
+// method is executed with the response JSON as an argument. If a non-200
 // status is given in the return, a failure handler is instead triggered
 // (if provided).
 
@@ -23,17 +23,20 @@ function Ajax(default_success_callback, default_fail_callback) {
   //   method: "GET", "POST", etc.
   this.communicate = function(
     method, uri, data, success_callback, fail_callback) {
+    if (data != null) {
+      data = JSON.stringify(data);
+    }
     $.ajax({
       type: method,
       url: uri,
-      data: JSON.stringify(data),
+      data: data,
       contentType: "application/json",
       dataType: "json",
       success: this.success_handler(
         success_callback,
         fail_callback),
       error: this.error_handler(fail_callback)
-    });      
+    });
   }
 
   this.get = function (uri, success_callback, fail_callback) {

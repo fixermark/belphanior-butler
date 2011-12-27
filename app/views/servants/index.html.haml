@@ -114,7 +114,7 @@
   function delete_servant(servant_name) {
     servant_communicator.post(
       "/servants/delete_servant?name="+servant_name,
-      "",
+      null,
       function () {
         ShowError("Servant Deleted.");
         update_servant_list();
@@ -124,7 +124,7 @@
   function clear_roles() {
     servant_communicator.post(
       "/servants/clear_role_cache",
-      "",
+      null,
       function () {
         ShowError("Role cache cleared.");
         update_servant_list();
@@ -156,7 +156,7 @@
   %p Servant URL
   %input{:id=>"servant_url"}
   %button{:id=>"commit_add_servant"} Add Servant
-  
+
 
 %button{:id=>"add_servant_button"} Add Servant
 .servant_controls
