@@ -20,7 +20,7 @@ class ServantTest < ActiveSupport::TestCase
     json_out = servant.to_json
     servant_hash = JSON.parse(json_out)
     assert_equal('Foo', servant_hash['name'])
-    assert_equal('http://127.0.0.1', servant_hash['url'])
+    assert_equal('http://127.0.0.1:80', servant_hash['url'])
     assert_equal("<some protocol string>", servant_hash['protocol'])
     assert_equal("loading_roles", servant_hash['status'])
 
@@ -30,7 +30,7 @@ class ServantTest < ActiveSupport::TestCase
     json_out = servant2.to_json
     servant_hash = JSON.parse(json_out)
     assert_equal('Foo', servant_hash['name'] )
-    assert_equal('http://127.0.0.1', servant_hash['url'])
+    assert_equal('http://127.0.0.1:80', servant_hash['url'])
     assert_equal("loading_protocol", servant_hash['status'])
   end
 
@@ -55,7 +55,7 @@ class ServantTest < ActiveSupport::TestCase
       "name" : "foo",
       "url" : "http://127.0.0.1",
       "protocol" : "{\\\"roles\\\" : [{\\\"role_url\\\" : \\\"http://myhost.com:3000/relative/path\\\",\\\"handlers\\\" : []}]}"
-    }       
+    }
     eof
     servant = Servant.new_from_json(json)
     urls = servant.role_urls
@@ -71,7 +71,7 @@ class ServantTest < ActiveSupport::TestCase
       "name" : "foo",
       "url" : "http://127.0.0.1",
       "protocol" : "{\\\"roles\\\" : [{\\\"role_url\\\" : \\\"/relative/path\\\",\\\"handlers\\\" : []}]}"
-    }       
+    }
     eof
     servant = Servant.new_from_json(json)
     urls = servant.role_urls
