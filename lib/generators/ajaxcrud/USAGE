@@ -1,0 +1,19 @@
+Description:
+    Creates a controller and associated Belphanior view for manipulating a
+    simple Model.
+
+    Most models in Belphanior map more-or-less directly onto the associated
+    UI list, but the mapping is not quite simple. This generator builds the
+    controller and view for manipulating the underlying model, taking care
+    of client-server data passage and dynamic updating on the client side.
+
+Example:
+    rails generate ajaxcrud model_name [controller_name]
+
+    If controller_name is omitted, pluralized model_name will be used.
+
+    This will create:
+        app/controllers/controller_name_controller.rb
+        app/helpers/controller_name_helper.rb
+        app/views/controller_name/index.html.haml
+        test/functional/controller_name_controller_test
