@@ -1,7 +1,8 @@
-%link{:href=>"qunit/qunit/qunit.css",:rel=>"stylesheet",:type=>"text/css"}
-%script{:type=>"text/javascript",:src=>"qunit/qunit/qunit.js"}
+%link{:href => "qunit/qunit/qunit.css",:rel => "stylesheet", :type => "text/css"}
+%script{:type => "text/javascript", :src=> "qunit/qunit/qunit.js"}
+= javascript_include_tag "ajaxcrud"
 :javascript
-  test("Example test", function() {
+  test("Qunit online", function() {
     ok(true, "QUnit online.");
   });
 
@@ -11,6 +12,78 @@
     equal(role.name(), "test");
     equal(role.url, "http://test_url");
   });
+
+  module("Ajaxcrud");
+  test("Row parsing", function() {
+    var crud = new AjaxCrud("ignored", "duck", "ducks", "ignored")
+      .add_text_input("Foo", "foo")
+      .add_checkbox_input("Bar", "bar")
+      .add_text_input("Baz", "baz");
+    var content = crud.row_html_content({
+      "id" : 1,
+      "foo" : "Test 1",
+      "bar" : true,
+      "baz" : "Test 2"});
+    equal(content,
+      "<li class='row' id='duck_1'><div class='field field_foo'>"
+      + "Test 1</div>"
+      + "<div class='field field_bar'>true</div>"
+      + "<div class='field field_baz'>Test 2</div>"
+      + "</li>");
+    header = crud.header_html_content();
+    equal(header,
+      "<div class='header'>"
+      + "<div class='column field_foo'>Foo</div>"
+      + "<div class='column field_bar'>Bar</div>"
+      + "<div class='column field_baz'>Baz</div>"
+      + "</div>");
+  });
+  test("Display JSON object", function() {
+    var crud = new AjaxCrud("ignored", "duck", "ducks", "ignored")
+      .add_text_input("Foo", "foo")
+      .add_checkbox_input("Bar", "bar")
+      .add_text_input("Baz", "baz");
+    var content = crud.crud_html_content([
+        {
+          "id" : 1,
+          "foo" : "Row 1 test 1",
+          "bar" : true,
+          "baz" : "Row 1 test 2"
+        },
+        {
+          "id" : 2,
+          "foo" : "Row 2 test 1",
+          "bar" : false,
+          "baz" : "Row 2 test 2"
+        }
+      ]);
+    equal(content,
+          "<div class='ajaxcrud' id='ajaxcrud_ducks'>"
+          + "<div class='header'>"
+          + "<div class='column field_foo'>Foo</div>"
+          + "<div class='column field_bar'>Bar</div>"
+          + "<div class='column field_baz'>Baz</div>"
+          + "</div>"
+          + "<ul class='rows'>"
+          + "<li class='row' id='duck_1'>"
+          + "<div class='field field_foo'>Row 1 test 1</div>"
+          + "<div class='field field_bar'>true</div>"
+          + "<div class='field field_baz'>Row 1 test 2</div>"
+          + "</li>"
+          + "<li class='row' id='duck_2'>"
+          + "<div class='field field_foo'>Row 2 test 1</div>"
+          + "<div class='field field_bar'>false</div>"
+          + "<div class='field field_baz'>Row 2 test 2</div>"
+          + "</li>"
+          + "</ul>"
+          + "<div class='controls'>"
+          + "<button id='add_duck_button'>Add duck</button>"
+          + "</div>"
+          + "</div>");
+
+
+  });
+
 
 #qunit-header Belphanior unit tests
 #qunit-banner
