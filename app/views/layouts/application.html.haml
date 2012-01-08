@@ -7,6 +7,7 @@
     = javascript_include_tag "jquery-1.5.1.min.js"
     = javascript_include_tag "jquery-ui-1.8.11.custom.min.js"
     = javascript_include_tag "jquery-url-parser/jquery.url.js"
+    = javascript_include_tag "signals"
     = javascript_include_tag "log"
     = javascript_include_tag "communicate"
     = javascript_include_tag "errorbar"
@@ -15,14 +16,14 @@
       default_communicator = new Ajax(function (response) {
         ShowError("default_success_callback triggered; success not handled.");
         Logger.log("default_success_callback triggered; success not handled. Data was " + JSON.stringify(data));
-      }, 
+      },
       function(error_description) {
         ShowError(error_description.short_description);
         Logger.log(error_description.long_description);
       });
 
       function highlight_current_location_tab() {
-        // applies highlighting to the tab that 
+        // applies highlighting to the tab that
         // matches the path we're in
         var locs = $.url($(location).attr('href'))
           .attr('path').split('/');
@@ -38,7 +39,7 @@
         // Sends a command to the server in immediate mode
         // and posts the result back.
         output_callback("Running command...");
-      
+
         var communicator = new Ajax(function (response) {
           output_callback(response["response"]);
         },
@@ -47,7 +48,7 @@
         });
 
         communicator.post("/immediate_script", {
-          "command" : input_string});      
+          "command" : input_string});
       }
 
       function run_command(input_textbox, output_textbox) {
@@ -101,6 +102,6 @@
           %textarea{:id=>"console_input"}
         .console_output_frame
           %textarea{:id=>"console_output", :readonly=>"true"}
-      .console_controls  
+      .console_controls
         %button{:id=>"run_command_button"} Run Command
         %button{:id=>"hide_console_button"} Hide Console

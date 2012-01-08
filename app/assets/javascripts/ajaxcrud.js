@@ -50,13 +50,19 @@
 //   controller_prefix/get_plural_model_name,
 //   controller_prefix/update_model_name,
 //   controller_prefix/delete_model_name
-function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix) {
+//  options: Dictionary of additional options:
+//   get_message: Message to send to make an AJAX get request.
+//   post_message: Message to send to make an AJAX post request.
+function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix, options) {
   this.ui_selector = ui_selector;
   this.model_name = model_name;
   this.plural_model_name = plural_model_name;
   this.controller_prefix = controller_prefix;
+  this.get_message = options.get_message || "AJAX_GET";
+  this.post_message = options.post_message || "AJAX_POST";
+
   // mappings from fields to entries in the CRUDable object.
-  // format: [{display name, field name, type="text"|"checkbox"}]
+  // format: [{display_name, field_name, type="text"|"checkbox"}]
   this.field_input_mappings = [];
 
   // add_* methods allow you to specify the input parameters that will
@@ -84,6 +90,25 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix)
 	"type" : "checkbox"});
     return this;
   }
+
+  // Retrieves data from the server and displays it at the
+  // node specified by ui_selector.
+  this.read = function() {
+    var self = this;
+    Signal(this.get_message, {
+	"fail_handler" : function(fail_data) {
+	  throw "TODO(mtomczak): implement fail handler.";
+	},
+	"success_handler" : function(data) {
+	  $(self.ui_selector).html(
+	    self.crud_html_content(data.data));
+	}
+      });
+  }
+
+  //////////
+  // Internal methods
+  //////////
 
   // Parses a CRUDable object into an HTML representation.
   this.row_html_content = function(crud_object) {
@@ -133,5 +158,6 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix)
     result += "</div></div>";
     return result;
   }
-  // TODO(mtomczak): get from server rule, rule to parse retrieved data into rows.
+
+  // TODO(mtomczak): get from server rule
 }
