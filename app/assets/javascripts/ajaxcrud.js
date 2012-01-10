@@ -29,11 +29,13 @@
 // Another DOM object is created to serve as the editor for creating or
 // editing rows. It is spliced into the DOM at a sensible location
 // (at the bottom for create, in the middle for edit).
-// That object's format is as follows:
-// <div class="ajaxcrud_editor" id="ajaxcrud_plural_model_name_editor">
+// That object's format is as follows (where "identifier" is either
+// <model_name> for add or <model_name>_<id> for edit):
+// <div class="ajaxcrud_editor"
+//  id="ajaxcrud_<identifier>_editor">
 //  [auto-generated body of labels and inputs]
-//  <button id="save_model_name_button">Save</button>
-//  <button id="cancel_model_name_button">Cancel</button>
+//  <button id="save_<identifier>_button">Save</button>
+//  <button id="cancel_<identifier>_button">Cancel</button>
 // </div>
 
 // Ajax CRUD interaction handler.
@@ -159,5 +161,50 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
     return result;
   }
 
-  // TODO(mtomczak): get from server rule
+  // Adds an editor at the specified location.
+  //
+  // Args:
+  //   ui_selector: JQuery selector path to the add location. Editor will be
+  //    appended under this location.
+  //   editor_name: Name string used to generate unique IDs. Must be unique
+  //    to this editor.
+  //   edited_object: CRUD object to edit. Can be nil.
+  //   save_callback: Method to run when "Save" is pressed.
+  //    passed the JQuery representation of the edited object; if true is
+  //    returned, editor is destroyed.
+  //   cancel_callback: Method to run when "Cancel" is pressed. If callback is
+  //   nil or true is returned by callback, editor is
+  //   destroyed.
+  this.add_editor = function(ui_selector, editor_name, edited_object,
+			     save_callback, cancel_callback) {
+    var editor_node = $("<div class='ajaxcrud_editor' id='ajaxcrud_'" +
+			editor_name + "_editor'></div>");
+    var editor_content = "";
+    $.each(this.field_input_mappings, function(index, mapping) {
+	editor_content += "<div class='input_label'>"
+	  + mapping.display_name + "</div>";
+	var input_id = "ajaxcrud_input_" + editor_name +
+	  "_" + mapping.field_name + "'";
+	var input_value = "";
+	if (edited_object) {
+	  if (mapping.type == "text") {
+	    input_value = " value='" + edited_object[mapping.field_name] + "'";
+	  } else { // Checkbox
+	    if (edited_object[mapping.field_name]) {
+	      input_value = " checked='checked'";
+	    }
+	  }
+	}
+	editor_content += "<input type='" + mapping.type +
+	  "' id='" + input_id + input_value + "'/>";
+      });
+    editor_content += "<button id='save_"
+    + editor_name + "_button'>Save</button>";
+    editor_content += "<button id='cancel_"
+    + editor_name + "_button'>Cancel</button>";
+    editor_node.html(editor_content);
+    $(ui_selector).append(editor_node);
+  }
+
+  // TODO(mtomczak): editor
 }
