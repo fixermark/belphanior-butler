@@ -16,7 +16,8 @@
 //   <ul class="rows">
 //    <li class="row" id="model_name_<id>">
 //     <div class="field field_field_name">[data in field]</div>
-//     [edit button][delete button]
+//     <button id="button_edit_<model_name>_<id>">Edit</button>
+//     <button id="button_delete_<model_name>_<id>">Delete</button>
 //    </li>
 //    . . .
 //   </ul>
@@ -115,11 +116,16 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
   // Parses a CRUDable object into an HTML representation.
   this.row_html_content = function(crud_object) {
     var result = "";
-    result += "<li class='row' id='"+this.model_name+"_"+crud_object["id"]+"'>";
+    var model_name_id = this.model_name + "_" + crud_object["id"];
+    result += "<li class='row' id='" + model_name_id + "'>";
     $.each(this.field_input_mappings, function (index, field_input_mapping) {
 	result += "<div class='field field_" + field_input_mapping["field_name"] +
 	  "'>" + crud_object[field_input_mapping["field_name"]] + "</div>";
       });
+    result += ("<button id='button_edit_" +
+	       model_name_id + "'>Edit</button>");
+    result += ("<button id='button_delete_" +
+	       model_name_id + "'>Delete</button>");
     result += "</li>"
     return result;
   }
