@@ -103,8 +103,8 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
 	  throw "TODO(mtomczak): implement fail handler.";
 	},
 	"success_handler" : function(data) {
-	  $(self.ui_selector).html(
-	    self.crud_html_content(data.data));
+	  $(self.ui_selector).html(self.crud_html_content(data.data));
+	  self.configure_buttons(data.data, self.model_name);
 	}
       });
   }
@@ -114,19 +114,24 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
   //////////
 
   // Parses a CRUDable object into an HTML representation.
-  this.row_html_content = function(crud_object) {
+  //
+  // Args:
+  //   crud_object: CRUDable object.
+  //   row_id: Unique identifier for the row.
+  this.row_html_content = function(crud_object, row_id) {
     var result = "";
-    var model_name_id = this.model_name + "_" + crud_object["id"];
-    result += "<li class='row' id='" + model_name_id + "'>";
+    result += "<li class='row' id='" + row_id + "'>";
     $.each(this.field_input_mappings, function (index, field_input_mapping) {
 	result += "<div class='field field_" + field_input_mapping["field_name"] +
 	  "'>" + crud_object[field_input_mapping["field_name"]] + "</div>";
       });
+    result += "<div class='buttons' id='" + row_id + "_buttons'>";
     result += ("<button id='button_edit_" +
-	       model_name_id + "'>Edit</button>");
+	       row_id + "'>Edit</button>");
     result += ("<button id='button_delete_" +
-	       model_name_id + "'>Delete</button>");
-    result += "</li>"
+	       row_id + "'>Delete</button>");
+    result += "</div>";
+    result += "</li>";
     return result;
   }
 
@@ -157,11 +162,12 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
     result += this.header_html_content();
     result += "<ul class='rows'>";
     $.each(data, function(index, crud_object) {
-      result += self.row_html_content(crud_object);
+      var model_name_id = self.model_name + "_" + crud_object["id"];
+      result += self.row_html_content(crud_object, model_name_id);
     });
     result += "</ul>";
     result += "<div class='controls'>";
-    result += "<button id='add_" + this.model_name + "_button'>";
+    result += "<button id='button_add_" + this.model_name + "'>";
     result += "Add " + this.model_name + "</button>";
     result += "</div></div>";
     return result;
@@ -179,12 +185,13 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
   //    passed the JQuery representation of the edited object; if true is
   //    returned, editor is destroyed.
   //   cancel_callback: Method to run when "Cancel" is pressed. If callback is
-  //   nil or true is returned by callback, editor is
+  //   null or true is returned by callback, editor is
   //   destroyed.
   this.add_editor = function(ui_selector, editor_name, edited_object,
 			     save_callback, cancel_callback) {
-    var editor_node = $("<div class='ajaxcrud_editor' id='ajaxcrud_'" +
-			editor_name + "_editor'></div>");
+    var editor_id = 'ajaxcrud_' + editor_name + '_editor';
+    var editor_node = $("<div class='ajaxcrud_editor' id='"
+			+ editor_id + "'></div>");
     var editor_content = "";
     $.each(this.field_input_mappings, function(index, mapping) {
 	editor_content += "<div class='input_label'>"
@@ -204,12 +211,48 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
 	editor_content += "<input type='" + mapping.type +
 	  "' id='" + input_id + input_value + "'/>";
       });
-    editor_content += "<button id='save_"
-    + editor_name + "_button'>Save</button>";
-    editor_content += "<button id='cancel_"
-    + editor_name + "_button'>Cancel</button>";
+    var save_button_id = 'button_save_' + editor_name;
+    var cancel_button_id = 'button_cancel_' + editor_name;
+    editor_content += ("<button id='" + save_button_id +
+		       "'>Save</button>");
+    editor_content += ("<button id='" + cancel_button_id +
+		       "'>Cancel</button>");
     editor_node.html(editor_content);
     $(ui_selector).append(editor_node);
+    $("#" + save_button_id).button().click(function (evt) {
+	// TODO(mtomczak): Bundle up data to save.
+	if (save_callback({})) {
+	  $("#" + editor_id).remove();
+	}
+      });
+    $("#" + cancel_button_id).button().click(function (evt) {
+	if (cancel_callback == null || cancel_callback()) {
+	  $("#" + editor_id).remove();
+	}
+      });
+  }
+
+  // Configures the buttons in the user-interface (row edit / delete, new model)
+  this.configure_buttons = function(crud_objects, model_name) {
+    var self = this;
+    $.each(crud_objects, function(index, crud_object) {
+      var row_id = model_name + "_" + crud_object["id"];
+      $("#button_edit_" + row_id).button().click(function(evt) {
+	  $("#" + row_id + "_buttons").hide();
+	  self.add_editor("#" + row_id,
+			  row_id,
+			  crud_object,
+			  function () {
+			    $("#" + row_id + "_buttons").show();
+			    return true },
+			  function () {
+			    $("#" + row_id + "_buttons").show();
+			    return true});
+
+	});
+      $("#button_delete_" + row_id).button();
+    });
+    $("#button_add_" + model_name).button();
   }
 
   // TODO(mtomczak): editor
