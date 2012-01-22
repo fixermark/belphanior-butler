@@ -221,7 +221,11 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
     editor_node.html(editor_content);
     $(ui_selector).append(editor_node);
     $("#" + save_button_id).button().click(function (evt) {
-	var save_object = self.encode_editor_to_json(editor_name);
+	var edited_object_id = null;
+	if (edited_object) {
+	  edited_object_id = edited_object.id;
+	}
+	var save_object = self.encode_editor_to_json(editor_name, edited_object_id);
 	if (save_callback(save_object)) {
 	  $("#" + editor_id).remove();
 	}
@@ -258,7 +262,10 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
 
   // Encodes an editor into a JSON object by pulling the
   // values from its fields.
-  this.encode_editor_to_json = function(editor_name) {
+  // editor_name: Unique identifier string of the editor.
+  // edited_object_id: Unique identifier of the
+  //  edited object. Can be NULL.
+  this.encode_editor_to_json = function(editor_name, edited_object_id) {
     var self = this;
     var result = {};
     $.each(this.field_input_mappings, function (index, mapping) {
@@ -270,6 +277,9 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
 	  result[mapping.field_name] = ($(input_id).is(':checked') == true);
 	}
       });
+    if (edited_object_id) {
+      result.id = edited_object_id;
+    }
     return result;
   }
   // TODO(mtomczak): editor

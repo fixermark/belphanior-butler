@@ -128,10 +128,11 @@
     equal($("#duck_2 .field_baz").text(), "Row 2 test 2");
 
     crud.add_editor(
-      "#duck_2", "duck_2", {"foo" : "data 1", "bar" : true, "baz" : "data 2" } , function(updated_data) {
+      "#duck_2", "duck_2", {"foo" : "data 1", "bar" : true, "baz" : "data 2", "id": 3} , function(updated_data) {
       equal(updated_data.foo, "data 1");
       equal(updated_data.bar, true);
       equal(updated_data.baz, "data 2");
+      equal(updated_data.id, 3);
       return false;
       });
 
