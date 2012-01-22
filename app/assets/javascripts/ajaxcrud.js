@@ -193,6 +193,7 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
     var editor_node = $("<div class='ajaxcrud_editor' id='"
 			+ editor_id + "'></div>");
     var editor_content = "";
+    var self = this;
     $.each(this.field_input_mappings, function(index, mapping) {
 	editor_content += "<div class='input_label'>"
 	  + mapping.display_name + "</div>";
@@ -220,8 +221,8 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
     editor_node.html(editor_content);
     $(ui_selector).append(editor_node);
     $("#" + save_button_id).button().click(function (evt) {
-	// TODO(mtomczak): Bundle up data to save.
-	if (save_callback({})) {
+	var save_object = self.encode_editor_to_json(editor_name);
+	if (save_callback(save_object)) {
 	  $("#" + editor_id).remove();
 	}
       });
@@ -255,5 +256,21 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
     $("#button_add_" + model_name).button();
   }
 
+  // Encodes an editor into a JSON object by pulling the
+  // values from its fields.
+  this.encode_editor_to_json = function(editor_name) {
+    var self = this;
+    var result = {};
+    $.each(this.field_input_mappings, function (index, mapping) {
+	var input_id = ("#ajaxcrud_input_" + editor_name +
+			"_" + mapping.field_name);
+	if (mapping.type == "text") {
+	  result[mapping.field_name] = $(input_id).val();
+	} else { // checkbox
+	  result[mapping.field_name] = ($(input_id).is(':checked') == true);
+	}
+      });
+    return result;
+  }
   // TODO(mtomczak): editor
 }
