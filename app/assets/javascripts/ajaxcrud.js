@@ -22,7 +22,7 @@
 //    . . .
 //   </ul>
 //   <div class="controls">
-//    <button id="add_model_name_button">Add model_name</button>
+//    <button id="button_add_model_name">Add model_name</button>
 //   </div>
 //  </div>
 // </insertion_point>
@@ -180,7 +180,7 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
   //    appended under this location.
   //   editor_name: Name string used to generate unique IDs. Must be unique
   //    to this editor.
-  //   edited_object: CRUD object to edit. Can be nil.
+  //   edited_object: CRUD object to edit. Can be null.
   //   save_callback: Method to run when "Save" is pressed.
   //    passed the JQuery representation of the edited object; if true is
   //    returned, editor is destroyed.
@@ -257,7 +257,21 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
 	});
       $("#button_delete_" + row_id).button();
     });
-    $("#button_add_" + model_name).button();
+    $("#button_add_" + model_name).button().click(function(evt) {
+	var add_button = "#button_add_" + model_name;
+	$(add_button).hide();
+	self.add_editor("#ajaxcrud_" + self.plural_model_name,
+			"new_" + self.model_name,
+			null,
+			function(data) {
+			  $(add_button).show();
+			  return true;
+			},
+			function() {
+			  $(add_button).show();
+			  return true;
+			});
+      });
   }
 
   // Encodes an editor into a JSON object by pulling the

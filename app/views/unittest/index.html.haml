@@ -133,14 +133,23 @@
       equal(updated_data.bar, true);
       equal(updated_data.baz, "data 2");
       equal(updated_data.id, 3);
-      return false;
+      return true;
       });
 
     equal($("#duck_2 .ajaxcrud_editor #button_save_duck_2").text(), "Save");
     equal($("#duck_2 .ajaxcrud_editor #button_cancel_duck_2").text(), "Cancel");
     equal($("#ajaxcrud_input_duck_2_bar").is(':checked'), true);
     $("#button_save_duck_2").trigger("click");
-  });
+    equal($("#duck_2 .ajaxcrud_editor #button_save_duck_2").length, 0);
+
+    $("#button_add_duck").trigger("click");
+    equal($(".ajaxcrud_editor #button_save_new_duck").text(), "Save");
+    $("#button_cancel_new_duck").trigger("click");
+    equal($(".ajaxcrud_editor #button_save_new_duck").length, 0);
+  }
+
+  // TODO(mtomczak): Trip Cancel button; verify that editor is destroyed.
+  );
 
 
 #qunit-header Belphanior unit tests
