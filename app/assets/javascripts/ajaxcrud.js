@@ -239,6 +239,9 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
     editor_content += ("<button id='" + cancel_button_id +
 		       "'>Cancel</button>");
     editor_node.html(editor_content);
+    var delete_editor_fn = function () {
+      $("#" + editor_id).remove();
+    }
     $(ui_selector).append(editor_node);
     $("#" + save_button_id).button().click(function (evt) {
 	var edited_object_id = null;
@@ -246,14 +249,11 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 	  edited_object_id = edited_object.id;
 	}
 	var save_object = self.encode_editor_to_json(editor_name, edited_object_id);
-	if (save_callback(save_object)) {
-	  $("#" + editor_id).remove();
-	}
+	save_callback(save_object, delete_editor_fn, function () {});
       });
-    $("#" + cancel_button_id).button().click(function (evt) {
-	if (cancel_callback == null || cancel_callback()) {
-	  $("#" + editor_id).remove();
-	}
+    $("#" + cancel_button_id).button().click(function () {
+	cancel_callback != null && cancel_callback();
+	delete_editor_fn();
       });
   }
 
@@ -262,34 +262,59 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
     var self = this;
     $.each(crud_objects, function(index, crud_object) {
       var row_id = model_name + "_" + crud_object["id"];
+      var show_row_buttons_fn = function () {
+	$("#" + row_id + "_buttons").show();
+      }
       $("#button_edit_" + row_id).button().click(function(evt) {
 	  $("#" + row_id + "_buttons").hide();
 	  self.add_editor("#" + row_id,
 			  row_id,
 			  crud_object,
-			  function () {
-			    $("#" + row_id + "_buttons").show();
-			    return true },
-			  function () {
-			    $("#" + row_id + "_buttons").show();
-			    return true});
-
+			  function (data, on_success, on_fail) {
+			    Signal(self.update_message,
+				    {
+				      "object" : data,
+				      "success_handler" : function () {
+					on_success();
+					show_row_buttons_fn();
+				      },
+				      "failure_handler" : function () {}
+				    });
+			  },
+			  show_row_buttons_fn);
 	});
       $("#button_delete_" + row_id).button();
     });
     $("#button_add_" + model_name).button().click(function(evt) {
 	var add_button = "#button_add_" + model_name;
+	var editor_name = "new_" + self.model_name;
+	var close_editor = function () {
+	  $(add_button).show();
+	};
 	$(add_button).hide();
 	self.add_editor("#ajaxcrud_" + self.plural_model_name,
 			"new_" + self.model_name,
 			null,
-			function(data) {
-			  $(add_button).show();
-			  return true;
+			function(data, on_success, on_fail) {
+			  Signal(self.create_message,
+				 {
+				   "object" : data,
+				   "success_handler" : function () {
+				     close_editor();
+				     on_success();
+				     // TODO(mtomczak): This design will not work.
+				     // editor needs to hide as the result of a
+				     // message, not in response to a bool return
+				     // from the success handler, which may need
+				     // to do async processing.
+				     //
+				     // Success and fail continuations passed in.
+				   },
+				   "failure_handler" : on_fail
+				     });
 			},
 			function() {
-			  $(add_button).show();
-			  return true;
+			  close_editor();
 			});
       });
   }
@@ -316,5 +341,4 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
     }
     return result;
   }
-  // TODO(mtomczak): editor
 }
