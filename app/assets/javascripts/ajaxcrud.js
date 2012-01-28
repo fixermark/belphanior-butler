@@ -38,6 +38,29 @@
 //  <button id="save_<identifier>_button">Save</button>
 //  <button id="cancel_<identifier>_button">Cancel</button>
 // </div>
+//
+// The ajaxcrud ui communicates with the enclosing Javascript using
+// signals; Signal() events are sent to be picked up by handlers.
+// The signal handlers pass objects in with the following signatures:
+//
+// create_message: Message to send to make an AJAX create request.
+//  Args:
+//   object: JSON representation of hte object to create (without an id).
+//   success_handler: function() called if the object is created successfully.
+//   fail_handler: function() called if the object could not be created.
+// read_message: Message to send to get the UI data.
+//  Args:
+//   success_handler: function(data) called if the read succeeds.
+//    data is an array of JSON objects.
+//   fail_handler: function() called if the read fails.
+// update_message: Message to send to update an object. Arguments:
+//  object: JSON representation of the object to update.
+//  success_handler: function() called when the object is updated successfully.
+//  fail_handler: function() called if the object cannot be updated.
+// delete_message: Message to send to delete an object. Arguments:
+//  id: ID of the object to delete.
+//  success_handler: function() called if the object is deleted successfully.
+//  fail_handler: function() called if the object could not be deleted.
 
 // Ajax CRUD interaction handler.
 //
@@ -46,23 +69,20 @@
 //   the model editor should be inserted.
 //  model_name: Name of the model in Ruby.
 //  plural_model_name: Pluralized name of the model in Ruby.
-//  controller_prefix: the prefix for the path to the resources
-//   that manipulate this object; the actual
-//   URLS will be
-//   controller_prefix/add_model_name,
-//   controller_prefix/get_plural_model_name,
-//   controller_prefix/update_model_name,
-//   controller_prefix/delete_model_name
 //  options: Dictionary of additional options:
-//   get_message: Message to send to make an AJAX get request.
-//   post_message: Message to send to make an AJAX post request.
-function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix, options) {
+//   create_message
+//   read_message
+//   update_message
+//   delete_message
+function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
   this.ui_selector = ui_selector;
   this.model_name = model_name;
   this.plural_model_name = plural_model_name;
-  this.controller_prefix = controller_prefix;
-  this.get_message = options.get_message || "AJAX_GET";
-  this.post_message = options.post_message || "AJAX_POST";
+  this.create_message = options.create_message || "AJAX_CREATE";
+  this.read_message = options.read_message || "AJAX_READ";
+  this.update_message = options.update_message || "AJAX_UPDATE";
+  this.delete_message = options.delete_message || "AJAX_DELETE";
+
 
   // mappings from fields to entries in the CRUDable object.
   // format: [{display_name, field_name, type="text"|"checkbox"}]
@@ -98,7 +118,7 @@ function AjaxCrud(ui_selector, model_name, plural_model_name, controller_prefix,
   // node specified by ui_selector.
   this.read = function() {
     var self = this;
-    Signal(this.get_message, {
+    Signal(this.read_message, {
 	"fail_handler" : function(fail_data) {
 	  throw "TODO(mtomczak): implement fail handler.";
 	},
