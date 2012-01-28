@@ -95,7 +95,7 @@
   });
   test("Get server data", function () {
     // TODO(mtomczak): These should be set up and torn down properly.
-    Handle("TEST_GET", function (data) {
+    Handle("TEST_READ", function (data) {
       data.success_handler({
         "data" : [
           {
@@ -115,7 +115,7 @@
 
     // TODO(mtomczak): Should create / destroy a DOM node,
     // not use a live test-get-server-data-output node.
-    var crud = new AjaxCrud("#test-get-server-data-output", "duck", "ducks", "ignored", {"get_message" : "TEST_GET", "post_message" : "TEST_POST"})
+    var crud = new AjaxCrud("#test-get-server-data-output", "duck", "ducks", {"read_message" : "TEST_READ", "update_message" : "TEST_UPDATE"})
       .add_text_input("Foo", "foo")
       .add_checkbox_input("Bar", "bar")
       .add_text_input("Baz", "baz");
@@ -148,7 +148,7 @@
     equal($(".ajaxcrud_editor #button_save_new_duck").length, 0);
   }
 
-  // TODO(mtomczak): Trip Cancel button; verify that editor is destroyed.
+  // TODO(mtomczak): Test create, update, and delete operations.
   );
 
 
