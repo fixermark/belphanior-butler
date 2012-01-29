@@ -168,10 +168,23 @@
     $("#button_save_new_duck").trigger("click");
     equal($(".ajaxcrud_editor #button_save_new_duck").length, 0);
     equal(create_called, true);
-  }
 
-  // TODO(mtomczak): Test update, and delete operations.
-  );
+    $("#button_delete_duck_1").trigger("click");
+    equal($("#duck_1 .ajaxcrud_delete_confirm #button_duck_1_delete_yes").text(), "Yes");
+
+    var delete_called = false;
+
+    Handle("TEST_DELETE", function (args) {
+      delete_called = true;
+      // TODO(mtomczak): ID should not exist.
+      equal(args.id, 1);
+      args.success_handler();
+    });
+
+    $("#button_duck_1_delete_yes").trigger("click");
+    equal(delete_called, true);
+    // TODO(mtomczak): Test delete operations.
+  });
 
 
 #qunit-header Belphanior unit tests
