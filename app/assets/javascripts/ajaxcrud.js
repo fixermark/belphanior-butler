@@ -39,6 +39,16 @@
 //  <button id="cancel_<identifier>_button">Cancel</button>
 // </div>
 //
+// One last DOM object is created to confirm deletion. It is spliced into
+// the DOM underneath the row to delete.
+// The object's format is as follows:
+// <div class="ajaxcrud_delete_confirm"
+//   id="ajaxcrud_<identifier>_delete_confirm">
+//   Really delete?
+//   <button id="button_<identifier>_delete_yes">Yes</button>
+//   <button id="button_<identifier>_delete_no">No</button>
+// </div>
+//
 // The ajaxcrud ui communicates with the enclosing Javascript using
 // signals; Signal() events are sent to be picked up by handlers.
 // The signal handlers pass objects in with the following signatures:
@@ -257,6 +267,30 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
       });
   }
 
+  this.add_delete_confirm = function(ui_selector, editor_name, object_id,
+				     yes_callback, no_callback) {
+    var self = this;
+    var deleter_id = "ajaxcrud_" + editor_name + "_delete_confirm";
+    var yes_id = "button_" + editor_name + "_delete_yes";
+    var no_id = "button_" + editor_name + "_delete_no";
+    deleter_node = $("<div class='ajaxcrud_delete_confirm' id='"
+		     + deleter_id + "'>Really delete?"
+		     + "<button id='" + yes_id + "'>Yes</button>"
+		     + "<button id='" + no_id + "'>No</button>"
+		     + "</div>");
+    var delete_fn = function () {
+      $("#" + deleter_id).remove();
+    }
+    $(ui_selector).append(deleter_node);
+    $("#" + yes_id).button().click(function () {
+	yes_callback(object_id, delete_fn, function () {});
+      });
+    $("#" + no_id).button().click(function () {
+	no_callback();
+	delete_fn();
+      });
+  }
+
   // Configures the buttons in the user-interface (row edit / delete, new model)
   this.configure_buttons = function(crud_objects, model_name) {
     var self = this;
@@ -276,15 +310,32 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 				      "object" : data,
 				      "success_handler" : function () {
 					on_success();
-					show_row_buttons_fn();
+					self.read();
 				      },
-				      "failure_handler" : function () {}
+				      "failure_handler" : on_fail
 				    });
 			  },
 			  show_row_buttons_fn);
 	});
-      $("#button_delete_" + row_id).button();
-    });
+      $("#button_delete_" + row_id).button().click(function(evt) {
+	  $("#" + row_id + "_buttons").hide();
+	  self.add_delete_confirm("#" + row_id,
+				  row_id,
+				  crud_object.id,
+				  function(id, on_success, on_fail) {
+				    Signal(self.delete_message,
+					   {
+					     "id" : id,
+					       "success_handler" : function () {
+					       on_success();
+					       self.read();
+					     },
+					       "failure_handler" : on_fail
+						 });
+				  },
+				  show_row_buttons_fn);
+	});
+      });
     $("#button_add_" + model_name).button().click(function(evt) {
 	var add_button = "#button_add_" + model_name;
 	var editor_name = "new_" + self.model_name;
@@ -300,7 +351,6 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 				 {
 				   "object" : data,
 				   "success_handler" : function () {
-				     close_editor();
 				     on_success();
 				     // TODO(mtomczak): This design will not work.
 				     // editor needs to hide as the result of a
@@ -309,9 +359,10 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 				     // to do async processing.
 				     //
 				     // Success and fail continuations passed in.
+				     self.read();
 				   },
-				   "failure_handler" : on_fail
-				     });
+				     "failure_handler" : on_fail
+				       });
 			},
 			function() {
 			  close_editor();
