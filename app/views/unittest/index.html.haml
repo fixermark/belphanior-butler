@@ -94,7 +94,7 @@
           + "</div>");
   });
   test("Get server data", function () {
-    // TODO(mtomczak): These should be set up and torn down properly.
+    // TODO(mtomczak): These handlers should be set up and torn down properly.
     Handle("TEST_READ", function (data) {
       data.success_handler({
         "data" : [
@@ -113,8 +113,6 @@
         ]});
     });
 
-    // TODO(mtomczak): Should create / destroy a DOM node,
-    // not use a live test-get-server-data-output node.
     var crud = new AjaxCrud("#test-get-server-data-output", "duck", "ducks", {
     "create_message" : "TEST_CREATE",
     "read_message" : "TEST_READ",
@@ -176,7 +174,6 @@
 
     Handle("TEST_DELETE", function (args) {
       delete_called = true;
-      // TODO(mtomczak): ID should not exist.
       equal(args.id, 1);
       args.success_handler();
     });
