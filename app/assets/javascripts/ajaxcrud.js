@@ -352,13 +352,6 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 				   "object" : data,
 				   "success_handler" : function () {
 				     on_success();
-				     // TODO(mtomczak): This design will not work.
-				     // editor needs to hide as the result of a
-				     // message, not in response to a bool return
-				     // from the success handler, which may need
-				     // to do async processing.
-				     //
-				     // Success and fail continuations passed in.
 				     self.read();
 				   },
 				     "failure_handler" : on_fail
