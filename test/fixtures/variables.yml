@@ -6,4 +6,4 @@
 #
 one:
   name: "foo"
-  value: "hi"
+  value: "[\"hi\"]"
