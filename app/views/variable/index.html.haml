@@ -1,0 +1,38 @@
+= javascript_include_tag "ajaxcrud"
+:javascript
+  $(function () {
+    Handle("VARIABLE_CREATE", function(args) {
+      default_communicator.post("/variable/add",
+                                args.object,
+                                args.success_handler,
+                                args.fail_handler);
+    });
+    Handle("VARIABLE_READ", function(args) {
+      default_communicator.get("/variable/get",
+                               args.success_handler,
+                               args.fail_handler);
+    });
+    Handle("VARIABLE_UPDATE", function(args) {
+      default_communicator.post("/variable/update",
+                                args.object,
+                                args.success_handler,
+                                args.fail_handler);
+    });
+    Handle("VARIABLE_DELETE", function(args) {
+      default_communicator.post("/variable/delete",
+                                args.id,
+                                args.success_handler,
+                                args.fail_handler);
+    });
+    ajax = new AjaxCrud($("#variables"), "variable", "variables", {
+      "create_message" : "VARIABLE_CREATE",
+      "read_message" : "VARIABLE_READ",
+      "update_message" : "VARIABLE_UPDATE",
+      "delete_message" : "VARIABLE_DELETE"
+    });
+    ajax.add_text_input("name", "name")
+       .add_text_input("value", "value");
+    ajax.read();
+  });
+
+%div{:id=>"variables"}
