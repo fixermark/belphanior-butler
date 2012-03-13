@@ -8,7 +8,8 @@ class Variable < ActiveRecord::Base
   def as_json(*a)
     {
       'name' => self.name,
-      'value' => self.value
+      'value' => self.value,
+      'id' => self.id
     }
   end
   def value

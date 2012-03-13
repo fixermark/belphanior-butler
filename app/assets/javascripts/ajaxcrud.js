@@ -55,7 +55,7 @@
 //
 // create_message: Message to send to make an AJAX create request.
 //  Args:
-//   object: JSON representation of hte object to create (without an id).
+//   object: JSON representation of the object to create (without an id).
 //   success_handler: function() called if the object is created successfully.
 //   fail_handler: function() called if the object could not be created.
 // read_message: Message to send to get the UI data.

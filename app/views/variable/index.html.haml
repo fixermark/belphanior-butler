@@ -20,7 +20,7 @@
     });
     Handle("VARIABLE_DELETE", function(args) {
       default_communicator.post("/variable/delete",
-                                args.id,
+                                {"id" : args.id},
                                 args.success_handler,
                                 args.fail_handler);
     });
