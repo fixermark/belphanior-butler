@@ -10,12 +10,12 @@
 // <insertion point>
 //  <div class="ajaxcrud" id="ajaxcrud_plural_model_name">
 //   <div class='header'>
-//     <div class='column field_field_name'>display_name</div>
+//     <div class='column field_name'>display_name</div>
 //     . . .
 //   </div>
 //   <ul class="rows">
 //    <li class="row" id="model_name_<id>">
-//     <div class="field field_field_name">[data in field]</div>
+//     <div class="field field_name">[data in field]</div>
 //     <button id="button_edit_<model_name>_<id>">Edit</button>
 //     <button id="button_delete_<model_name>_<id>">Delete</button>
 //    </li>

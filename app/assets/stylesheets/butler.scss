@@ -298,7 +298,7 @@ $documentation_command_name_size: 20px;
     padding-left: 0px;
     margin-left: 12px;
     margin-top: 0px;
-    margin-bottom: 0px;    
+    margin-bottom: 0px;
     .role_command_argument_name {
       font-weight: bold;
       font-style: italic;
@@ -400,5 +400,35 @@ $name_input_height: 40px;
     min-height: 150px;
     font-size: 18pt;
     padding: 5px;
+  }
+}
+
+//// Ajaxcrud styles ////
+.ajaxcrud.name {
+  width: 30%;
+}
+
+.ajaxcrud {
+  display: table;
+  .header {
+    display: table-header-group;
+    .column {
+      display: table-cell;
+      font-weight: bold;
+      font-size: 24px;
+    }
+  }
+  .rows {
+  display: table-row-group;
+    .row {
+      display: table-row;
+      .field {
+        display: table-cell;
+        font-size: 16px;
+      }
+      button {
+        display: table-cell;
+      }
+    }
   }
 }
