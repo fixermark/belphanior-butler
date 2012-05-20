@@ -22,7 +22,7 @@ class VariableController < ApplicationController
       respond_app_error("RecordNotFound")
     else
       variable.from_json(request.raw_post)
-      if not variable.save
+      if not variable.save!
         respond_app_error("SaveFailed")
       else
         respond_ok

@@ -4,6 +4,27 @@
 require 'rubygems'
 require 'belphanior/servant_caller'
 
+class VariableAdaptor
+  # Adapts reads / writes to variable store as
+  # gets / sets on a singleton object.
+  class VariableDoesNotExistError < RuntimeError
+  end
+
+  def [] (name)
+    requested_variable = Variable.find_by_name(name)
+    if not requested_variable then
+      raise VariableDoesNotExistError, "No variable by name '#{name}'"
+    end
+    requested_variable.value
+  end
+
+  def []=(name, value)
+    requested_variable = Variable.find_or_create_by_name(name)
+    requested_variable.value = value
+    requested_variable.save
+  end
+end
+
 class ScriptRunner
   class ServantLoadFailure < RuntimeError
   end
@@ -15,6 +36,7 @@ class ScriptRunner
 
   def anonymous_script
     # Provide a context in which to run an anonymous script
+    variables = VariableAdaptor.new
     binding
   end
 

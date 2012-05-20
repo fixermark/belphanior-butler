@@ -5,10 +5,18 @@ require 'json'
 
 class Variable < ActiveRecord::Base
   validates_uniqueness_of :name
+  def from_json(json)
+    puts "Hello, world!"
+    prototype = JSON.parse(json)
+    self.name = prototype['name']
+    self.value = JSON.parse(prototype['value'])[0]
+    self.id = prototype['id']
+  end
+
   def as_json(*a)
     {
       'name' => self.name,
-      'value' => self.value,
+      'value' => read_attribute(:value),
       'id' => self.id
     }
   end
