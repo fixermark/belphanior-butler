@@ -94,9 +94,13 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
   this.delete_message = options.delete_message || "AJAX_DELETE";
 
 
-  // mappings from fields to entries in the CRUDable object.
+  // Widgets that should be displayed in the viewer and editor.
   // format: [{display_name, field_name, type="text"|"checkbox"}]
-  this.field_input_mappings = [];
+  this.ui_widgets = [];
+
+  // Buttons that should be displayed in the viewer and editor.
+  // format: [{display_name, event_name}]
+  this.ui_buttons = [];
 
   // add_* methods allow you to specify the input parameters that will
   // be expected from the JSON and how they map to the user interface.
@@ -110,17 +114,23 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
   //  .add_text_input("employee id", "emp_id")
   //  .add_checkbox_input("Likes pie", "pie");
   this.add_text_input = function(display_name, field_name) {
-    this.field_input_mappings.push({
+    this.ui_widgets.push({
 	"display_name" : display_name,
 	"field_name" : field_name,
 	"type" : "text"});
     return this;
   }
   this.add_checkbox_input = function(display_name, field_name) {
-    this.field_input_mappings.push({
+    this.ui_widgets.push({
 	"display_name" : display_name,
 	"field_name" : field_name,
 	"type" : "checkbox"});
+    return this;
+  }
+  this.add_button_widget = function(display_name, event_name) {
+    this.ui_buttons.push({
+	"display_name" : display_name,
+	"event_name" : event_name});
     return this;
   }
 
@@ -151,11 +161,16 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
   this.row_html_content = function(crud_object, row_id) {
     var result = "";
     result += "<li class='row' id='" + row_id + "'>";
-    $.each(this.field_input_mappings, function (index, field_input_mapping) {
-	result += "<div class='field field_" + field_input_mapping["field_name"] +
-	  "'>" + crud_object[field_input_mapping["field_name"]] + "</div>";
+    $.each(this.ui_widgets, function (index, ui_widget) {
+	result += "<div class='field field_" + ui_widget["field_name"] +
+	  "'>" + crud_object[ui_widget["field_name"]] + "</div>";
       });
     result += "<div class='buttons' id='" + row_id + "_buttons'>";
+    $.each(this.ui_buttons, function (index, ui_button) {
+	result += "<button class='widget_button' id='widget_button_" +
+	    ui_button["event_name"] + "_" + row_id + "'>" +
+	    ui_button["display_name"] + "</button>";
+      });
     result += ("<button id='button_edit_" +
 	       row_id + "'>Edit</button>");
     result += ("<button id='button_delete_" +
@@ -168,10 +183,10 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
   // Outputs the header for the data table.
   this.header_html_content = function() {
     var result = "<div class='header'>";
-    $.each(this.field_input_mappings, function(index, field_input_mapping) {
+    $.each(this.ui_widgets, function(index, ui_widget) {
 	result += "<div class='column field_"
-	  + field_input_mapping["field_name"]
-	  + "'>" + field_input_mapping["display_name"]
+	  + ui_widget["field_name"]
+	  + "'>" + ui_widget["display_name"]
 	  + "</div>";
       });
     result += "</div>";
@@ -224,7 +239,7 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 			+ editor_id + "'></div>");
     var editor_content = "";
     var self = this;
-    $.each(this.field_input_mappings, function(index, mapping) {
+    $.each(this.ui_widgets, function(index, mapping) {
 	editor_content += "<div class='input_label'>"
 	  + mapping.display_name + "</div>";
 	var input_id = "ajaxcrud_input_" + editor_name +
@@ -299,6 +314,13 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
       var show_row_buttons_fn = function () {
 	$("#" + row_id + "_buttons").show();
       }
+      $.each(self.ui_buttons, function (index, ui_button) {
+      	  var button_id = "#widget_button_" + ui_button["event_name"] + "_" + row_id;
+      	  $("#widget_button_" + ui_button["event_name"] + "_" + row_id).button().
+      	    click(function(evt) {
+		self.handle_click_event(ui_button["event_name"], crud_object);
+      	      });
+      	});
       $("#button_edit_" + row_id).button().click(function(evt) {
 	  $("#" + row_id + "_buttons").hide();
 	  self.add_editor("#" + row_id,
@@ -371,7 +393,7 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
   this.encode_editor_to_json = function(editor_name, edited_object_id) {
     var self = this;
     var result = {};
-    $.each(this.field_input_mappings, function (index, mapping) {
+    $.each(this.ui_widgets, function (index, mapping) {
 	var input_id = ("#ajaxcrud_input_" + editor_name +
 			"_" + mapping.field_name);
 	if (mapping.type == "text") {
@@ -384,5 +406,9 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
       result.id = edited_object_id;
     }
     return result;
+  }
+
+  this.handle_click_event = function(event_message, crud_object) {
+    Signal(event_message, {"object" : crud_object});
   }
 }

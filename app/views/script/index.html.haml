@@ -24,6 +24,9 @@
                                 args.success_handler,
                                 args.fail_handler);
     });
+    Handle("SCRIPT_RUN", function(args) {
+      alert("Asked to run on " +args["object"]["id"]);
+    });
     ajax = new AjaxCrud($("#scripts"), "script", "scripts", {
       "create_message" : "SCRIPT_CREATE",
       "read_message" : "SCRIPT_READ",
@@ -31,7 +34,8 @@
       "delete_message" : "SCRIPT_DELETE"
     });
     ajax.add_text_input("name", "name")
-       .add_text_input("command", "command");
+       .add_text_input("command", "command")
+       .add_button_widget("Run", "SCRIPT_RUN");
     ajax.read();
   });
 
