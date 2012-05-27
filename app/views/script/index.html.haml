@@ -1,0 +1,38 @@
+= javascript_include_tag "ajaxcrud"
+:javascript
+  $(function () {
+    Handle("SCRIPT_CREATE", function(args) {
+      default_communicator.post("/script/add",
+                                args.object,
+                                args.success_handler,
+                                args.fail_handler);
+    });
+    Handle("SCRIPT_READ", function(args) {
+      default_communicator.get("/script/get",
+                               args.success_handler,
+                               args.fail_handler);
+    });
+    Handle("SCRIPT_UPDATE", function(args) {
+      default_communicator.post("/script/update",
+                                args.object,
+                                args.success_handler,
+                                args.fail_handler);
+    });
+    Handle("SCRIPT_DELETE", function(args) {
+      default_communicator.post("/script/delete",
+                                {"id" : args.id},
+                                args.success_handler,
+                                args.fail_handler);
+    });
+    ajax = new AjaxCrud($("#scripts"), "script", "scripts", {
+      "create_message" : "SCRIPT_CREATE",
+      "read_message" : "SCRIPT_READ",
+      "update_message" : "SCRIPT_UPDATE",
+      "delete_message" : "SCRIPT_DELETE"
+    });
+    ajax.add_text_input("name", "name")
+       .add_text_input("command", "command");
+    ajax.read();
+  });
+
+%div{:id=>"scripts"}
