@@ -25,7 +25,8 @@
                                 args.fail_handler);
     });
     Handle("SCRIPT_RUN", function(args) {
-      alert("Asked to run on " +args["object"]["id"]);
+      run_command_text(args["object"]["command"],
+                       Logger.log);
     });
     ajax = new AjaxCrud($("#scripts"), "script", "scripts", {
       "create_message" : "SCRIPT_CREATE",

@@ -25,6 +25,31 @@ class VariableAdaptor
   end
 end
 
+class ScriptAdaptor
+  # Adapts reads on a script store as gets on the script database.
+  class ScriptDoesNotExistError < RuntimeError
+  end
+
+  def [](name)
+    requested_script = Script.find_by_name(name)
+    if not requested_script then
+      raise ScriptDoesNotExistError, "No script by name '#{name}'"
+    end
+    # Need to return a callable; compile that script!
+    runner = ScriptRunner.new
+    Proc.new {
+      eval(
+           requested_script.command,
+           runner.anonymous_script,
+           requested_script.name, 1)
+    }
+  end
+
+  def call(name)
+    self[name].call
+  end
+end
+
 class ScriptRunner
   class ServantLoadFailure < RuntimeError
   end
@@ -37,6 +62,7 @@ class ScriptRunner
   def anonymous_script
     # Provide a context in which to run an anonymous script
     variables = VariableAdaptor.new
+    scripts = ScriptAdaptor.new
     binding
   end
 

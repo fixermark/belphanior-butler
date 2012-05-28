@@ -257,6 +257,11 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
 	editor_content += "<input type='" + mapping.type +
 	  "' id='" + input_id + input_value + "'/>";
       });
+    $.each(this.ui_buttons, function(index, ui_button) {
+	editor_content += "<button id = 'button_" +
+	  ui_button["event_name"] + "_" + editor_name +
+	  "'>" + ui_button["display_name"] + "</button>";
+      });
     var save_button_id = 'button_save_' + editor_name;
     var cancel_button_id = 'button_cancel_' + editor_name;
     editor_content += ("<button id='" + save_button_id +
@@ -267,12 +272,20 @@ function AjaxCrud(ui_selector, model_name, plural_model_name,  options) {
     var delete_editor_fn = function () {
       $("#" + editor_id).remove();
     }
+    var edited_object_id = null;
+    if (edited_object) {
+      edited_object_id = edited_object.id;
+    }
     $(ui_selector).append(editor_node);
+    $.each(this.ui_buttons, function (index, ui_button) {
+	$("#button_" + ui_button["event_name"] + "_" + editor_name).button()
+	  .click(function(evt) {
+	      var obj = self.encode_editor_to_json(editor_name,
+						   edited_object_id);
+	      self.handle_click_event(ui_button["event_name"], obj);
+	    });
+      });
     $("#" + save_button_id).button().click(function (evt) {
-	var edited_object_id = null;
-	if (edited_object) {
-	  edited_object_id = edited_object.id;
-	}
 	var save_object = self.encode_editor_to_json(editor_name, edited_object_id);
 	save_callback(save_object, delete_editor_fn, function () {});
       });
