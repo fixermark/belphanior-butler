@@ -1,6 +1,46 @@
 :javascript
   function blocklyLoaded(blockly) {
     window.Blockly = blockly;
+    // resize iframe
+    // TODO(mtomczak): This should be possible with pure CSS,
+    // but there comes a time in a man's life when he just
+    // wants things positioned correctly without a lot of
+    // cogitation on embedding rules and what needs to resize
+    // to where.
+    $("#blockly_frame").height($(window).height() - 120);
+    $(function () {
+        $("#blockscript_new").button().click(
+          function () {
+            $("#new_script_name").show();
+        });
+        $("#blockscript_new_name_save").button();
+        $("#blockscript_new_name_cancel").button().click(
+          function () {
+            $("#new_script_name").hide();
+        });
+        $("#blockscript_run").button();
+        $("#blockscript_delete").button();
+        $("#blockscript_save").button();
+        $("#new_script_name").hide();
+    });
   }
+.script_selector
+  .script_buttons
+    %button{:id=>"blockscript_new"} New Script
+    %button{:id=>"blockscript_run"} Run Script
+    %button{:id=>"blockscript_delete"} Delete Script
+    %button{:id=>"blockscript_save"} Save Script
+  %select
+    %option{:value=>"Test1"} Test 1
+    %option{:value=>"Test2"} Test 2
 
-%iframe{:src=>"frame"}
+%iframe{:src=>"frame", :id=>"blockly_frame"}
+.dialog{:id=>"new_script_name"}
+  .background
+  .inner_frame
+    %p Enter name of new script:
+    %p
+      %input{:type=>"text", :id=>"blockscript_new_name_field"}
+    .dialog_buttons
+      %button{:id=>"blockscript_new_name_save"} Save
+      %button{:id=>"blockscript_new_name_cancel"} Cancel
