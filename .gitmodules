@@ -4,6 +4,6 @@
 [submodule "public/qunit"]
 	path = public/qunit
 	url = git://github.com/jquery/qunit.git
-[submodule "lib/blockly"]
-	path = lib/blockly
+[submodule "public/blockly"]
+	path = public/blockly
 	url = fixermark.com:~/git/blockly_git_clone.git
