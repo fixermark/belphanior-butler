@@ -1,0 +1,2 @@
+class BlockscriptController < ApplicationController
+end
