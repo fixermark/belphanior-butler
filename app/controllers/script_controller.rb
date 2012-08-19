@@ -1,6 +1,7 @@
 class ScriptController < ApplicationController
   def add
     new_script = Script.new_from_json(request.raw_post)
+    new_script.format = 'ruby'
     if not new_script.save
       respond_app_error("DuplicateRecord")
     else
@@ -9,7 +10,7 @@ class ScriptController < ApplicationController
   end
 
   def get
-    scripts = Script.find(:all)
+    scripts = Script.where(:format => 'ruby')
     respond_with_json(:data => scripts)
   end
 
@@ -18,6 +19,8 @@ class ScriptController < ApplicationController
     script = Script.find_by_id(data["id"])
     if not script
       respond_app_error("RecordNotFound")
+    elsif script.format != 'ruby'
+      respond_app_error("RecordNotRubyScript")
     else
       script.from_json(request.raw_post)
       if not script.save!
