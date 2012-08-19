@@ -1,5 +1,30 @@
 :javascript
   g_scripts = {};
+  g_current_script_id = null;
+
+  // Loads the script referenced by g_current_script_id into the editor.
+  function load_current_script() {
+    if (g_current_script_id == null) {
+      Blockly.mainWorkspace.clear();
+    } else {
+      var blockly_encoding = g_scripts[g_current_script_id]["command"];
+      Blockly.mainWorkspace.clear();
+      if (blockly_encoding != "") {
+        var xml = Blockly.Xml.textToDom(blockly_encoding);
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+      }
+    }
+  }
+
+  function select_script(new_script_id) {
+    if (g_current_script_id != null) {
+      var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      g_scripts[g_current_script_id]["command"] =
+         Blockly.Xml.domToPrettyText(xml);
+    }
+    g_current_script_id = new_script_id;
+    load_current_script();
+  }
 
   function update_scripts() {
     default_communicator.get(
@@ -23,7 +48,7 @@
       "/blockscript/add",
       {
         "name" : name,
-        "command" : "",
+        "command" : "<xml></xml>",
       },
       function (data) {
         update_scripts();
@@ -54,6 +79,9 @@
       $("#blockscript_delete").button();
       $("#blockscript_save").button();
       $("#new_script_name").hide();
+      $("#script_select").change(function () {
+        select_script($("#script_select").children("option:selected").val());
+      });
       update_scripts();
     });
   }
