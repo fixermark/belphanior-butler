@@ -1,4 +1,36 @@
 :javascript
+  g_scripts = {};
+
+  function update_scripts() {
+    default_communicator.get(
+      "/blockscript/get",
+      function (data) {
+        g_scripts = {};
+        var script_select_html = "";
+        $.each(data["data"], function (i, v) {
+          g_scripts[v["id"]] = v;
+          // TODO(mtomczak): v[name] here needs to be HTML-escaped
+          script_select_html += "<option value=\"" + v["id"]
+             + "\">" + v["name"] + "</option>\n";
+        });
+        $("#script_select").html(script_select_html);
+      });
+  }
+
+  function new_script() {
+    var name = $("#blockscript_new_name_field").val();
+    default_communicator.post(
+      "/blockscript/add",
+      {
+        "name" : name,
+        "command" : "",
+      },
+      function (data) {
+        update_scripts();
+        $("#new_script_name").hide();
+      });
+  }
+
   function blocklyLoaded(blockly) {
     window.Blockly = blockly;
     // resize iframe
@@ -9,28 +41,30 @@
     // to where.
     $("#blockly_frame").height($(window).height() - 120);
     $(function () {
-        $("#blockscript_new").button().click(
-          function () {
-            $("#new_script_name").show();
+      $("#blockscript_new").button().click(
+        function () {
+          $("#new_script_name").show();
         });
-        $("#blockscript_new_name_save").button();
-        $("#blockscript_new_name_cancel").button().click(
-          function () {
-            $("#new_script_name").hide();
+      $("#blockscript_new_name_save").button().click(new_script);
+      $("#blockscript_new_name_cancel").button().click(
+        function () {
+          $("#new_script_name").hide();
         });
-        $("#blockscript_run").button();
-        $("#blockscript_delete").button();
-        $("#blockscript_save").button();
-        $("#new_script_name").hide();
+      $("#blockscript_run").button();
+      $("#blockscript_delete").button();
+      $("#blockscript_save").button();
+      $("#new_script_name").hide();
+      update_scripts();
     });
   }
+
 .script_selector
   .script_buttons
     %button{:id=>"blockscript_new"} New Script
     %button{:id=>"blockscript_run"} Run Script
     %button{:id=>"blockscript_delete"} Delete Script
     %button{:id=>"blockscript_save"} Save Script
-  %select
+  %select{:id=>"script_select"}
     %option{:value=>"Test1"} Test 1
     %option{:value=>"Test2"} Test 2
 
