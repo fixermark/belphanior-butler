@@ -16,12 +16,16 @@
     }
   }
 
-  function select_script(new_script_id) {
+  function store_current_script() {
     if (g_current_script_id != null) {
       var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
       g_scripts[g_current_script_id]["command"] =
          Blockly.Xml.domToPrettyText(xml);
     }
+  }
+
+  function select_script(new_script_id) {
+    store_current_script();
     g_current_script_id = new_script_id;
     load_current_script();
   }
@@ -39,6 +43,7 @@
              + "\">" + v["name"] + "</option>\n";
         });
         $("#script_select").html(script_select_html);
+        choose_default_script();
       });
   }
 
@@ -56,6 +61,39 @@
       });
   }
 
+  // Saves the current script.
+  function save_script() {
+    store_current_script();
+    default_communicator.post(
+      "/blockscript/update",
+      g_scripts[g_current_script_id],
+      function (data) {
+        update_scripts();
+      });
+  }
+
+  function delete_script() {
+    // TODO(mtomczak): Undo butter-bar
+    if (g_current_script_id != null) {
+      default_communicator.post(
+        "/blockscript/delete",
+        g_scripts[g_current_script_id],
+        function (data) {
+          g_current_script_id = null;
+          update_scripts();
+        });
+    }
+  }
+
+  // Selects a valid script in the option list.
+  function choose_default_script() {
+    if (g_current_script_id != null) {
+      return;
+    }
+    g_current_script_id = $("#script_select").children("option:selected").val();
+    load_current_script();
+  }
+
   function blocklyLoaded(blockly) {
     window.Blockly = blockly;
     // resize iframe
@@ -64,7 +102,7 @@
     // wants things positioned correctly without a lot of
     // cogitation on embedding rules and what needs to resize
     // to where.
-    $("#blockly_frame").height($(window).height() - 120);
+    $("#blockly_frame").height($(window).height() - 130);
     $(function () {
       $("#blockscript_new").button().click(
         function () {
@@ -76,8 +114,8 @@
           $("#new_script_name").hide();
         });
       $("#blockscript_run").button();
-      $("#blockscript_delete").button();
-      $("#blockscript_save").button();
+      $("#blockscript_delete").button().click(delete_script);
+      $("#blockscript_save").button().click(save_script);
       $("#new_script_name").hide();
       $("#script_select").change(function () {
         select_script($("#script_select").children("option:selected").val());
