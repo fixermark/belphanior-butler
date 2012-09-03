@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
-
 gem 'rails', '3.1.1'
 
 # Bundle edge Rails instead:
@@ -22,6 +21,9 @@ end
 
 gem 'backgroundrb-rails3', '~> 1.1.6', :require => 'backgroundrb'
 gem 'jquery-rails'
+
+# Needed for Blockly parsing
+gem 'xml-simple'
 
 # Belphanior gems
 gem 'belphanior-script-tool'
