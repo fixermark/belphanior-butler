@@ -21,7 +21,7 @@ class DoController < ApplicationController
       if not script:
           respond_app_error("Cannot find script by name '#{script_name}'.")
       else
-        run_script_text script.command
+        run_script_text (script.command, script.format)
       end
     else
       respond_app_error("Cannot handle specified HTTP method.")

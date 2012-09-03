@@ -2,7 +2,7 @@ require 'json'
 
 class ImmediateScriptController < ApplicationController
   def index
-    command_text = JSON.parse(request.raw_post)['command']
-    run_script_text command_text
+    data = JSON.parse(request.raw_post)
+    run_script_text(data['command'], data['format'])
   end
 end

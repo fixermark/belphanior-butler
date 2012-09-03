@@ -12,5 +12,5 @@ Logger.hide_log = function() {
 
 Logger.log = function(data) {
   $("#log_content").html(
-    $("#log_content").html() + "<li>" + data + "</li>");
+    $("#log_content").html() + "<li><pre>" + data + "</pre></li>");
 }

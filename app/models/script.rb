@@ -5,13 +5,15 @@ class Script < ActiveRecord::Base
     json_hash = JSON.parse(json)
     self.name = json_hash['name']
     self.command = json_hash['command']
+    self.format = json_hash['format']
   end
 
   def as_json(*a)
     {
       'id' => self.id,
       'name' => self.name,
-      'command' => self.command
+      'command' => self.command,
+      'format' => self.format
     }
   end
 

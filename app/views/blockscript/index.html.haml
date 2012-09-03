@@ -47,6 +47,21 @@
       });
   }
 
+  function run_script() {
+    Logger.log("Running command...");
+    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var message = {
+      'command' : Blockly.Xml.domToPrettyText(xml),
+      'format' : 'blockly'
+    };
+    default_communicator.post(
+      "/immediate_script",
+      message,
+      function (data) {
+        Logger.log(data.response);
+      });
+  }
+
   function new_script() {
     var name = $("#blockscript_new_name_field").val();
     default_communicator.post(
@@ -56,6 +71,7 @@
         "command" : "<xml></xml>",
       },
       function (data) {
+        // TODO(mtomczak): new script should select the new script.
         update_scripts();
         $("#new_script_name").hide();
       });
@@ -113,7 +129,7 @@
         function () {
           $("#new_script_name").hide();
         });
-      $("#blockscript_run").button();
+      $("#blockscript_run").button().click(run_script);
       $("#blockscript_delete").button().click(delete_script);
       $("#blockscript_save").button().click(save_script);
       $("#new_script_name").hide();

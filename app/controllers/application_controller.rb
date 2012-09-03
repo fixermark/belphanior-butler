@@ -3,6 +3,8 @@
 
 require 'rubygems'
 require 'belphanior/servant_caller'
+require 'blockly/xml_parser'
+require 'blockly/context'
 
 class VariableAdaptor
   # Adapts reads / writes to variable store as
@@ -140,7 +142,24 @@ class ApplicationController < ActionController::Base
     end
     render :status => 500, :json => response
   end
-  def run_script_text(command_text)
+
+  def run_script_text(command_text, script_format)
+    if script_format == "blockly" then
+      run_blockly_script command_text
+    else
+      run_ruby_script command_text
+    end
+  end
+
+  def run_blockly_script(blockly_xml)
+    parser = Blockly::Xml::Parser.new
+    code = parser.parse(blockly_xml)
+    context = Blockly::Context.new
+    code.evaluate(context)
+    respond_with_json(:response => (context.stdout))
+  end
+
+  def run_ruby_script(command_text)
     runner = ScriptRunner.new
     begin
       respond_with_json(
@@ -152,6 +171,8 @@ class ApplicationController < ActionController::Base
     rescue Exception => e
       response = "Evaluation failed: An error occurred.\n"
       response << e.to_str() << "\n"
+      # Trim the stack trace at the immediate script entrypoint... no
+      # need to trace into the Butler framework.
       seen_immediate_script = false
       e.backtrace.each do |err_line|
         if err_line.start_with? "<Immediate script>" then
