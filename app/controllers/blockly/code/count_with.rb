@@ -14,7 +14,7 @@ module Blockly
       end
       def evaluate(context)
         context.set_local_variable_value(@name, @low_bound.evaluate(context))
-        while (context.get_local_variable_value(@name) <
+        while (context.get_local_variable_value(@name) <=
             (@high_bound.evaluate(context)))
           begin
             @statement.evaluate(context)
