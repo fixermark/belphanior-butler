@@ -52,6 +52,10 @@ module Blockly
           result_block = parse_math_constrain block
         when 'math_modulo'
           result_block = parse_math_modulo block
+        when 'math_random_int'
+          result_block = parse_random_int block
+        when 'math_random_float'
+          result_block = parse_random_float block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -119,6 +123,16 @@ module Blockly
           :MODULO,
           parse_block(block['value'][0]['block'][0]),
           parse_block(block['value'][1]['block'][0]))
+      end
+      def parse_random_int(block)
+        Blockly::Code::Op.new(
+          next_block_id,
+          :RANDINT,
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]))
+      end
+      def parse_random_float(block)
+        Blockly::Code::RandomNumber.new(next_block_id)
       end
     end
   end

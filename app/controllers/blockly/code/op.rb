@@ -47,6 +47,9 @@ module Blockly
           value1 and value2
         when :OR
           value1 or value2
+        # random numbers
+        when :RANDINT
+          rand(value2 - value1 + 1) + value1
         end
       end
     end
