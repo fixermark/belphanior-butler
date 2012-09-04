@@ -14,6 +14,7 @@ module Blockly
         value1 = @input1.evaluate(context)
         value2 = @input2.evaluate(context)
         case @op
+        #arithmetic
         when :ADD
           value1 + value2
         when :MINUS
@@ -24,6 +25,21 @@ module Blockly
           value1 / value2
         when :POWER
           value1 ** value2
+        # comparison
+        when :EQ
+          value1 == value2
+        when :NEQ
+          value1 != value2
+        # TODO(mtomczak): Should do type error catching here... Ruby
+        # has no definition for bool < bool
+        when :LT
+          value1 < value2
+        when :LTE
+          value1 <= value2
+        when :GT
+          value1 > value2
+        when :GTE
+          value1 >= value2
         end
       end
     end

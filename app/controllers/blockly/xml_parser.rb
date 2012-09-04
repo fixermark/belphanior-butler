@@ -1,5 +1,6 @@
 # Converts Blockly XML into a tree of blockly code objects ready for evaluation.
 require 'xmlsimple'
+require 'blockly/code/boolean'
 require 'blockly/code/op'
 require 'blockly/code/number'
 require 'blockly/code/string'
@@ -30,6 +31,10 @@ module Blockly
           result_block = parse_text block
         when 'text_print'
           result_block = parse_statement_print block
+        when 'logic_boolean'
+          result_block = parse_boolean block
+        when 'logic_compare'
+          result_block = parse_logic_op block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -51,6 +56,13 @@ module Blockly
           parse_block(block['value'][0]['block'][0]),
           parse_block(block['value'][1]['block'][0]))
       end
+      def parse_logic_op(block)
+        Blockly::Code::Op.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]))
+      end
       def parse_number(block)
         # TODO(mtomczak): Catch float conversion failure.
         Blockly::Code::Number.new(next_block_id, block['title'][0]['content'].to_f)
@@ -60,6 +72,9 @@ module Blockly
       end
       def parse_statement_print(block)
         Blockly::Code::Print.new(next_block_id, parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_boolean(block)
+        Blockly::Code::Boolean.new(next_block_id, block['title'][0]['content'])
       end
     end
   end
