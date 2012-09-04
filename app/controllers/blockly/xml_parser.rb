@@ -40,6 +40,10 @@ module Blockly
           result_block = parse_logic_op block
         when 'logic_negate'
           result_block = parse_not block
+        when 'math_single'
+          result_block = parse_math_single block
+        when 'math_round'
+          result_block = parse_math_single block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -83,6 +87,12 @@ module Blockly
       end
       def parse_not(block)
         Blockly::Code::Not.new(next_block_id, parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_math_single(block)
+        Blockly::Code::UnaryOp.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
       end
     end
   end
