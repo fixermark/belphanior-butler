@@ -1,12 +1,14 @@
 # Converts Blockly XML into a tree of blockly code objects ready for evaluation.
 require 'xmlsimple'
 require 'blockly/code/boolean'
+require 'blockly/code/clamp'
 require 'blockly/code/op'
 require 'blockly/code/not'
 require 'blockly/code/number'
 require 'blockly/code/string'
 require 'blockly/code/sequence'
 require 'blockly/code/print'
+
 module Blockly
   module Xml
     class Parser
@@ -44,6 +46,10 @@ module Blockly
           result_block = parse_math_single block
         when 'math_round'
           result_block = parse_math_single block
+        when 'math_trig'
+          result_block = parse_math_single block
+        when 'math_constrain'
+          result_block = parse_math_constrain block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -93,6 +99,17 @@ module Blockly
           next_block_id,
           block['title'][0]['content'],
           parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_math_constrain(block)
+        value_map = {}
+        block['value'].each do |val|
+          value_map[val['name']] = val['block'][0]
+        end
+        Blockly::Code::Clamp.new(
+          next_block_id,
+          parse_block(value_map['VALUE']),
+          parse_block(value_map['LOW']),
+          parse_block(value_map['HIGH']))
       end
     end
   end

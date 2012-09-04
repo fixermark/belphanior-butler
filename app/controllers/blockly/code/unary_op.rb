@@ -33,6 +33,19 @@ module Blockly
           value.ceil
         when :ROUNDDOWN
           value.floor
+        # Trigonometry
+        when :SIN
+          Math.sin value
+        when :COS
+          Math.cos value
+        when :TAN
+          Math.tan value
+        when :ASIN
+          Math.asin value
+        when :ACOS
+          Math.acos value
+        when :ATAN
+          Math.atan value
         end
       end
     end
