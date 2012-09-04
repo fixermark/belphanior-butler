@@ -5,6 +5,7 @@ require 'blockly/code/count_with'
 require 'blockly/code/clamp'
 require 'blockly/code/get_variable'
 require 'blockly/code/if'
+require 'blockly/code/loop_break'
 require 'blockly/code/op'
 require 'blockly/code/not'
 require 'blockly/code/number'
@@ -74,6 +75,8 @@ module Blockly
           result_block = parse_while block
         when 'controls_for'
           result_block = parse_count_with block
+        when 'controls_flow_statements'
+          result_block = parse_loop_flow block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -184,6 +187,11 @@ module Blockly
           parse_block(block['value'][0]['block'][0]),
           parse_block(block['value'][1]['block'][0]),
           parse_block(block['statement'][0]['block'][0]))
+      end
+      def parse_loop_flow(block)
+          Blockly::Code::LoopBreak.new(
+          next_block_id,
+          block['title'][0]['content'])
       end
       def parse_variables_set(block)
         Blockly::Code::SetVariable.new(

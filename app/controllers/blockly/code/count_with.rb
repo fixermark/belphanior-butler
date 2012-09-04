@@ -16,7 +16,13 @@ module Blockly
         context.set_local_variable_value(@name, @low_bound.evaluate(context))
         while (context.get_local_variable_value(@name) <
             (@high_bound.evaluate(context)))
-          @statement.evaluate(context)
+          begin
+            @statement.evaluate(context)
+          rescue LoopBreakException
+            if $!.type == :BREAK
+              return
+            end
+          end
           context.set_local_variable_value(@name,
             context.get_local_variable_value(@name) + 1)
         end

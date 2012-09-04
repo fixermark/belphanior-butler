@@ -25,7 +25,13 @@ module Blockly
               return
             end
           end
-          @block.evaluate(context)
+          begin
+            @block.evaluate(context)
+          rescue LoopBreakException
+            if $!.type == :BREAK
+              return
+            end
+          end
         end
       end
     end
