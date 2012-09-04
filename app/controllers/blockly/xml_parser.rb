@@ -2,6 +2,7 @@
 require 'xmlsimple'
 require 'blockly/code/boolean'
 require 'blockly/code/clamp'
+require 'blockly/code/if'
 require 'blockly/code/op'
 require 'blockly/code/not'
 require 'blockly/code/number'
@@ -56,6 +57,8 @@ module Blockly
           result_block = parse_random_int block
         when 'math_random_float'
           result_block = parse_random_float block
+        when 'controls_if'
+          result_block = parse_if block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -133,6 +136,23 @@ module Blockly
       end
       def parse_random_float(block)
         Blockly::Code::RandomNumber.new(next_block_id)
+      end
+      def parse_if(block)
+        # NOTE: If is mutable-structure; can include else-if and else subblocks
+        # <value name='IF0'>
+        # <statement name='DO0'>
+        # <value name='IF1'>  // else if
+        # <statement name='DO1'> // For every IFN block, a DON block
+        # <statement name='ELSE'> // ... sometimes, an ELSE block to cap it all.
+        if_blocks = []
+        do_blocks = []
+        block['value'].each do |value|
+          if_blocks << parse_block(value['block'][0])
+        end
+        block['statement'].each do |statement|
+          do_blocks << parse_block(statement['block'][0])
+        end
+        Blockly::Code::If.new(next_block_id, if_blocks, do_blocks)
       end
     end
   end
