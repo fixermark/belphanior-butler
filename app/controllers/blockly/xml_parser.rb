@@ -11,6 +11,7 @@ require 'blockly/code/plus_equals'
 require 'blockly/code/set_variable'
 require 'blockly/code/string'
 require 'blockly/code/sequence'
+require 'blockly/code/while'
 require 'blockly/code/print'
 
 module Blockly
@@ -68,6 +69,8 @@ module Blockly
           result_block = parse_variables_get block
         when 'controls_if'
           result_block = parse_if block
+        when 'controls_whileUntil'
+          result_block = parse_while block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -154,11 +157,6 @@ module Blockly
       end
       def parse_if(block)
         # NOTE: If is mutable-structure; can include else-if and else subblocks
-        # <value name='IF0'>
-        # <statement name='DO0'>
-        # <value name='IF1'>  // else if
-        # <statement name='DO1'> // For every IFN block, a DON block
-        # <statement name='ELSE'> // ... sometimes, an ELSE block to cap it all.
         if_blocks = []
         do_blocks = []
         block['value'].each do |value|
@@ -168,6 +166,13 @@ module Blockly
           do_blocks << parse_block(statement['block'][0])
         end
         Blockly::Code::If.new(next_block_id, if_blocks, do_blocks)
+      end
+      def parse_while(block)
+        Blockly::Code::While.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['statement'][0]['block'][0]))
       end
       def parse_variables_set(block)
         Blockly::Code::SetVariable.new(
