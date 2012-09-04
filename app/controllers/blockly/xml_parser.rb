@@ -1,6 +1,7 @@
 # Converts Blockly XML into a tree of blockly code objects ready for evaluation.
 require 'xmlsimple'
 require 'blockly/code/boolean'
+require 'blockly/code/count_with'
 require 'blockly/code/clamp'
 require 'blockly/code/get_variable'
 require 'blockly/code/if'
@@ -71,6 +72,8 @@ module Blockly
           result_block = parse_if block
         when 'controls_whileUntil'
           result_block = parse_while block
+        when 'controls_for'
+          result_block = parse_count_with block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -172,6 +175,14 @@ module Blockly
           next_block_id,
           block['title'][0]['content'],
           parse_block(block['value'][0]['block'][0]),
+          parse_block(block['statement'][0]['block'][0]))
+      end
+      def parse_count_with(block)
+        Blockly::Code::CountWith.new(
+          next_block_id,
+          block['variable'][0]['data'],
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]),
           parse_block(block['statement'][0]['block'][0]))
       end
       def parse_variables_set(block)
