@@ -40,6 +40,11 @@ module Blockly
           value1 > value2
         when :GTE
           value1 >= value2
+        # boolean logic
+        when :AND
+          value1 and value2
+        when :OR
+          value1 or value2
         end
       end
     end

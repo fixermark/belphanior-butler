@@ -35,6 +35,8 @@ module Blockly
           result_block = parse_boolean block
         when 'logic_compare'
           result_block = parse_logic_op block
+        when 'logic_operation'
+          result_block = parse_logic_op block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
