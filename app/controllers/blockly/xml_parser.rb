@@ -2,10 +2,12 @@
 require 'xmlsimple'
 require 'blockly/code/boolean'
 require 'blockly/code/clamp'
+require 'blockly/code/get_variable'
 require 'blockly/code/if'
 require 'blockly/code/op'
 require 'blockly/code/not'
 require 'blockly/code/number'
+require 'blockly/code/set_variable'
 require 'blockly/code/string'
 require 'blockly/code/sequence'
 require 'blockly/code/print'
@@ -57,6 +59,10 @@ module Blockly
           result_block = parse_random_int block
         when 'math_random_float'
           result_block = parse_random_float block
+        when 'variables_set'
+          result_block = parse_variables_set block
+        when 'variables_get'
+          result_block = parse_variables_get block
         when 'controls_if'
           result_block = parse_if block
         end
@@ -153,6 +159,17 @@ module Blockly
           do_blocks << parse_block(statement['block'][0])
         end
         Blockly::Code::If.new(next_block_id, if_blocks, do_blocks)
+      end
+      def parse_variables_set(block)
+        Blockly::Code::SetVariable.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_variables_get(block)
+        Blockly::Code::GetVariable.new(
+          next_block_id,
+          block['title'][0]['content'])
       end
     end
   end
