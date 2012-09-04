@@ -7,6 +7,7 @@ require 'blockly/code/if'
 require 'blockly/code/op'
 require 'blockly/code/not'
 require 'blockly/code/number'
+require 'blockly/code/plus_equals'
 require 'blockly/code/set_variable'
 require 'blockly/code/string'
 require 'blockly/code/sequence'
@@ -45,6 +46,8 @@ module Blockly
           result_block = parse_logic_op block
         when 'logic_negate'
           result_block = parse_not block
+        when 'math_change'
+          result_block = parse_math_change block
         when 'math_single'
           result_block = parse_math_single block
         when 'math_round'
@@ -108,6 +111,12 @@ module Blockly
       end
       def parse_not(block)
         Blockly::Code::Not.new(next_block_id, parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_math_change(block)
+        Blockly::Code::PlusEquals.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
       end
       def parse_math_single(block)
         Blockly::Code::UnaryOp.new(
