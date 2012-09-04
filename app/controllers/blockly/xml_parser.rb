@@ -50,6 +50,8 @@ module Blockly
           result_block = parse_math_single block
         when 'math_constrain'
           result_block = parse_math_constrain block
+        when 'math_modulo'
+          result_block = parse_math_modulo block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -110,6 +112,13 @@ module Blockly
           parse_block(value_map['VALUE']),
           parse_block(value_map['LOW']),
           parse_block(value_map['HIGH']))
+      end
+      def parse_math_modulo(block)
+        Blockly::Code::Op.new(
+          next_block_id,
+          :MODULO,
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]))
       end
     end
   end

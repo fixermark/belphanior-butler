@@ -25,6 +25,8 @@ module Blockly
           value1 / value2
         when :POWER
           value1 ** value2
+        when :MODULO
+          value1 % value2
         # comparison
         when :EQ
           value1 == value2
