@@ -2,6 +2,7 @@
 require 'xmlsimple'
 require 'blockly/code/boolean'
 require 'blockly/code/op'
+require 'blockly/code/not'
 require 'blockly/code/number'
 require 'blockly/code/string'
 require 'blockly/code/sequence'
@@ -37,6 +38,8 @@ module Blockly
           result_block = parse_logic_op block
         when 'logic_operation'
           result_block = parse_logic_op block
+        when 'logic_negate'
+          result_block = parse_not block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -77,6 +80,9 @@ module Blockly
       end
       def parse_boolean(block)
         Blockly::Code::Boolean.new(next_block_id, block['title'][0]['content'])
+      end
+      def parse_not(block)
+        Blockly::Code::Not.new(next_block_id, parse_block(block['value'][0]['block'][0]))
       end
     end
   end
