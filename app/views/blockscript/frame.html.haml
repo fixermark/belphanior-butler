@@ -1,0 +1,28 @@
+%script{:type => "text/javascript", :src => "/blockly/demos/blockly_compressed.js"}
+%script{:type => "text/javascript", :src => "/blockly/generators/javascript.js"}
+%script{:type => "text/javascript", :src => "/blockly/generators/javascript/control.js"}
+%script{:type => "text/javascript", :src => "/blockly/generators/javascript/text.js"}
+%script{:type => "text/javascript", :src => "/blockly/language/en/_messages.js"}
+%script{:type => "text/javascript", :src => "/blockly/language/common/control.js"}
+%script{:type => "text/javascript", :src => "/blockly/language/common/text.js"}
+%script{:type => "text/javascript", :src => "/blockly/language/common/logic.js"}
+%script{:type => "text/javascript", :src => "/blockly/language/common/math.js"}
+
+:css
+  html, body {
+    background-color: #fff;
+    margin: 0;
+    padding:0;
+    overflow: hidden;
+  }
+  .blocklySvg {
+    height: 100%;
+    width: 100%;
+  }
+:javascript
+  function blockly_init() {
+    Blockly.inject(document.body, {path: '/blockly/'});
+    // Let the top-level application know that Blockly is ready.
+    window.parent.blocklyLoaded(Blockly);
+  }
+%body{:onload => "blockly_init()"}
