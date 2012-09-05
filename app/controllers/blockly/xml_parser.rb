@@ -5,6 +5,7 @@ require 'blockly/code/count_with'
 require 'blockly/code/clamp'
 require 'blockly/code/get_variable'
 require 'blockly/code/if'
+require 'blockly/code/index_of'
 require 'blockly/code/loop_break'
 require 'blockly/code/op'
 require 'blockly/code/not'
@@ -49,6 +50,8 @@ module Blockly
           result_block = parse_text_isEmpty block
         when 'text_endString'
           result_block = parse_text_endString block
+        when 'text_indexOf'
+          result_block = parse_text_indexOf block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -149,6 +152,13 @@ module Blockly
       end
       def parse_text_endString(block)
         Blockly::Code::EndString.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]))
+      end
+      def parse_text_indexOf(block)
+        Blockly::Code::IndexOf.new(
           next_block_id,
           block['title'][0]['content'],
           parse_block(block['value'][0]['block'][0]),
