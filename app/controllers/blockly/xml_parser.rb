@@ -52,6 +52,8 @@ module Blockly
           result_block = parse_text_endString block
         when 'text_indexOf'
           result_block = parse_text_indexOf block
+        when 'text_charAt'
+          result_block = parse_text_charAt block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -161,6 +163,13 @@ module Blockly
         Blockly::Code::IndexOf.new(
           next_block_id,
           block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]))
+      end
+      def parse_text_charAt(block)
+        Blockly::Code::Op.new(
+          next_block_id,
+          :TEXTCHARAT,
           parse_block(block['value'][0]['block'][0]),
           parse_block(block['value'][1]['block'][0]))
       end

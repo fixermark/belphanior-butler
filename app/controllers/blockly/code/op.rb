@@ -1,4 +1,4 @@
-# Math and boolean operators
+# Binary operators (math, comparison, boolean, text, etc.)
 require 'blockly/code/root'
 
 module Blockly
@@ -50,6 +50,11 @@ module Blockly
         # random numbers
         when :RANDINT
           rand(value2 - value1 + 1) + value1
+        # text
+        when :TEXTCHARAT
+          # TODO(mtomczak): Should error or do something sensible if
+          # outside character index.
+          value2.to_s[value1.to_i - 1, 1]
         end
       end
     end
