@@ -60,6 +60,12 @@ module Blockly
         when :TITLECASE
           # Note: Requires Ruby on Rails.
           value.to_s.titleize
+        when :TRIMSPACESLEFT
+          value.to_s.lstrip
+        when :TRIMSPACESRIGHT
+          value.to_s.rstrip
+        when :TRIMSPACESBOTH
+          value.to_s.strip
         end
       end
     end

@@ -56,6 +56,8 @@ module Blockly
           result_block = parse_text_charAt block
         when 'text_changeCase'
           result_block = parse_text_changeCase block
+        when 'text_trim'
+          result_block = parse_text_trim block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -179,6 +181,12 @@ module Blockly
         Blockly::Code::UnaryOp.new(
           next_block_id,
           block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_text_trim(block)
+        Blockly::Code::UnaryOp.new(
+          next_block_id,
+          "TRIMSPACES" + block['title'][0]['content'],
           parse_block(block['value'][0]['block'][0]))
       end
       def parse_statement_print(block)
