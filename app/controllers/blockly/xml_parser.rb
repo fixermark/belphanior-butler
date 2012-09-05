@@ -60,6 +60,8 @@ module Blockly
           result_block = parse_text_trim block
         when 'text_print'
           result_block = parse_statement_print block
+        # TODO(mtomczak): Remove 'text_prompt" from library; it's not
+        # FOR us.
         when 'logic_boolean'
           result_block = parse_boolean block
         when 'logic_compare'
