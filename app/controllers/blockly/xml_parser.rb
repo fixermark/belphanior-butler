@@ -43,6 +43,10 @@ module Blockly
           result_block = parse_text_join block
         when 'text_append'
           result_block = parse_text_append block
+        when 'text_length'
+          result_block = parse_text_length block
+        when 'text_isEmpty'
+          result_block = parse_text_isEmpty block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -127,6 +131,18 @@ module Blockly
         Blockly::Code::TextAppend.new(
           next_block_id,
           block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_text_length(block)
+        Blockly::Code::UnaryOp.new(
+          next_block_id,
+          :TEXTLENGTH,
+          parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_text_isEmpty(block)
+        Blockly::Code::UnaryOp.new(
+          next_block_id,
+          :TEXTISEMPTY,
           parse_block(block['value'][0]['block'][0]))
       end
       def parse_statement_print(block)

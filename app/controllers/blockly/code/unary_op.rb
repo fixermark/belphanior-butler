@@ -46,6 +46,11 @@ module Blockly
           Math.acos value
         when :ATAN
           Math.atan value
+        # Text
+        when :TEXTLENGTH
+          value.to_s.length
+        when :TEXTISEMPTY
+          value.to_s.empty?
         end
       end
     end
