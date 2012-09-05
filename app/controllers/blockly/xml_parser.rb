@@ -47,6 +47,8 @@ module Blockly
           result_block = parse_text_length block
         when 'text_isEmpty'
           result_block = parse_text_isEmpty block
+        when 'text_endString'
+          result_block = parse_text_endString block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -144,6 +146,13 @@ module Blockly
           next_block_id,
           :TEXTISEMPTY,
           parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_text_endString(block)
+        Blockly::Code::EndString.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]),
+          parse_block(block['value'][1]['block'][0]))
       end
       def parse_statement_print(block)
         Blockly::Code::Print.new(next_block_id, parse_block(block['value'][0]['block'][0]))
