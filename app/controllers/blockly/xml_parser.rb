@@ -39,6 +39,10 @@ module Blockly
           result_block = parse_number block
         when 'text'
           result_block = parse_text block
+        when 'text_join'
+          result_block = parse_text_join block
+        when 'text_append'
+          result_block = parse_text_append block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -111,6 +115,19 @@ module Blockly
       end
       def parse_text(block)
         Blockly::Code::String.new(next_block_id, block['title'][0]['content'])
+      end
+      def parse_text_join(block)
+        text_blocks = []
+        block['value'].each do |value|
+          text_blocks << parse_block(value['block'][0])
+        end
+        Blockly::Code::TextJoin.new(next_block_id, text_blocks)
+      end
+      def parse_text_append(block)
+        Blockly::Code::TextAppend.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
       end
       def parse_statement_print(block)
         Blockly::Code::Print.new(next_block_id, parse_block(block['value'][0]['block'][0]))
