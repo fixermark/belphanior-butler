@@ -51,6 +51,15 @@ module Blockly
           value.to_s.length
         when :TEXTISEMPTY
           value.to_s.empty?
+        # TODO(mtomczak): These should be locale-sensitive, but for
+        # now, we support ASCII-only.
+        when :UPPERCASE
+          value.to_s.upcase
+        when :LOWERCASE
+          value.to_s.downcase
+        when :TITLECASE
+          # Note: Requires Ruby on Rails.
+          value.to_s.titleize
         end
       end
     end

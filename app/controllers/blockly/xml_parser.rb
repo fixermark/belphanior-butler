@@ -54,6 +54,8 @@ module Blockly
           result_block = parse_text_indexOf block
         when 'text_charAt'
           result_block = parse_text_charAt block
+        when 'text_changeCase'
+          result_block = parse_text_changeCase block
         when 'text_print'
           result_block = parse_statement_print block
         when 'logic_boolean'
@@ -172,6 +174,12 @@ module Blockly
           :TEXTCHARAT,
           parse_block(block['value'][0]['block'][0]),
           parse_block(block['value'][1]['block'][0]))
+      end
+      def parse_text_changeCase(block)
+        Blockly::Code::UnaryOp.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
       end
       def parse_statement_print(block)
         Blockly::Code::Print.new(next_block_id, parse_block(block['value'][0]['block'][0]))
