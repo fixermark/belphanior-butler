@@ -1,3 +1,10 @@
+= javascript_include_tag "json2"
+= javascript_include_tag "jquery-1.5.1.min.js"
+= javascript_include_tag "jquery-ui-1.8.11.custom.min.js"
+= javascript_include_tag "jquery-url-parser/jquery.url.js"
+= javascript_include_tag "log"
+= javascript_include_tag "communicate"
+= javascript_include_tag "role"
 %script{:type => "text/javascript", :src => "/blockly/demos/blockly_compressed.js"}
 %script{:type => "text/javascript", :src => "/blockly/generators/javascript.js"}
 %script{:type => "text/javascript", :src => "/blockly/generators/javascript/control.js"}
@@ -8,6 +15,7 @@
 %script{:type => "text/javascript", :src => "/blockly/language/common/logic.js"}
 %script{:type => "text/javascript", :src => "/blockly/language/common/math.js"}
 %script{:type => "text/javascript", :src => "/blockly/language/common/variables.js"}
+%script{:type => "text/javascript", :src => "/roles_to_blockly.js"}
 
 :css
   html, body {
@@ -22,8 +30,18 @@
   }
 :javascript
   function blockly_init() {
-    Blockly.inject(document.body, {path: '/blockly/'});
-    // Let the top-level application know that Blockly is ready.
-    window.parent.blocklyLoaded(Blockly);
+    communicator = new Ajax(
+      function(success_response) {
+        Blockly.Belphanior.rolesToBlocks(success_response.data);
+        Blockly.inject(document.body, {path: '/blockly/'});
+        // Let the top-level application know that Blockly is ready.
+        window.parent.blocklyLoaded(Blockly);
+      },
+      function(fail_response) {
+        $("#error").html(fail_response.long_description);
+      });
+    communicator.get("/documentation/get");
   }
+
 %body{:onload => "blockly_init()"}
+  #error
