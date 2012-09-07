@@ -34,11 +34,31 @@ Blockly.Belphanior.nameToHue = function(name) {
 	  init: function () {
 	    this.setColour(roleHue);
 	    this.appendTitle(command["name"]);
-	    this.setPreviousStatement(true);
-	    this.setNextStatement(true);
-	    // TODO(mtomczak): Inputs
+	    if ('return' in command) {
+	      this.setOutput(true, String);
+	    } else {
+	      this.setPreviousStatement(true);
+	      this.setNextStatement(true);
+	    }
+	    var thisBlock = this;
+	    var argDescriptions = "";
+	    $.each(command['arguments'], function(argIdx, argument) {
+		var argName = argument['name'];
+		// Shorten for args that are essentially direct objects.
+		if (command['arguments'].length == 1) {
+		  argName = "";
+		}
+
+		thisBlock.appendInput(argName,
+				      Blockly.INPUT_VALUE,
+				      "INPUT" + argIdx,
+				      null);
+		argDescriptions += argument['name']
+		  + ": " + argument["description"] + "\n";
+	      });
+
 	    this.setTooltip(function () {
-		return "Test block for " + category + ": " + command["name"]
+		return command['description'] + "\n\n" + argDescriptions;
 	      });
 	  }
 	};

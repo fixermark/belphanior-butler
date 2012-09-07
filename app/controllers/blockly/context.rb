@@ -8,10 +8,24 @@ module Blockly
       @stdout = ""
       # top of the stack is last
       @local_variables = {}
+      @scriptrunner = ScriptRunner.new
+      @servants_by_role = {}
+      # For each role, map one default servant.
+      @scriptrunner.servants_by_role.each do |key, value|
+        @servants_by_role[key] = value[0]
+      end
     end
 
     def print(value)
       @stdout << value + "\n"
+    end
+
+    def call_role(role_uri, command_name, arg_value_list)
+      @scriptrunner.call_servant_role_uri_command(
+        @servants_by_role[role_uri],
+        role_uri,
+        command_name,
+        arg_value_list)
     end
 
     # Retrieves the value of a variable. If the variable does not

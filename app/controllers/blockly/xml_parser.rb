@@ -98,6 +98,8 @@ module Blockly
           result_block = parse_count_with block
         when 'controls_flow_statements'
           result_block = parse_loop_flow block
+        when /^belphanior_/
+          result_block = parse_belphanior block
         end
         if block.has_key? "next"
           output = Code::Sequence.new(next_block_id)
@@ -282,6 +284,20 @@ module Blockly
         Blockly::Code::GetVariable.new(
           next_block_id,
           block['title'][0]['content'])
+      end
+      def parse_belphanior(block)
+        args = []
+        if block.has_key? 'value'
+          block['value'].each do |value|
+            args << parse_block(value['block'][0])
+          end
+        end
+        role_uri, command_name = block['type'][11, block['type'].length].split("|")
+        Blockly::Code::Belphanior.new(
+          next_block_id,
+          role_uri,
+          command_name,
+          args)
       end
     end
   end

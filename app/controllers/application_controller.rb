@@ -87,6 +87,37 @@ class ScriptRunner
     yield servant.get_context_by_name(servant_role)
   end
 
+  def servants_by_role()
+  # Retrieves all servants and yields a hash from role URI toservant
+  # name list.
+    role_uris = {}
+    Servant.all.each do |servant|
+      role_urls = servant.role_urls
+      if role_urls != nil
+        role_urls.each do |url|
+          if url != nil
+            url_s = url.to_s
+            if role_uris.has_key? url_s
+              role_uris[url_s] << servant.name
+            else
+              role_uris[url_s] = [servant.name]
+            end
+          end
+        end
+      end
+    end
+    role_uris
+  end
+
+  def call_servant_role_uri_command(
+      servant_name,
+      role_uri,
+      command_name,
+      args)
+    caller_hash = servant_by_name(servant_name).callers_by_role_url_and_name
+    caller_hash[role_uri][command_name].call(args)
+  end
+
  private
   def cache_servant_caller(name)
     servant = Servant.find_by_name(name)
