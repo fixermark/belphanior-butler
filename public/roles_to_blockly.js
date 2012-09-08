@@ -24,7 +24,7 @@ Blockly.Belphanior.nameToHue = function(name) {
   Blockly.Belphanior.rolesToBlocks = function(rolesJson) {
     $.each(rolesJson, function (idx, roleJson) {
 	var role = new Role(roleJson.model, roleJson.url);
-	var category = role.name();
+	var category = "+ " + role.name();
 	var roleUid = role.url;
 	var roleHue = Blockly.Belphanior.nameToHue(roleUid);
 
