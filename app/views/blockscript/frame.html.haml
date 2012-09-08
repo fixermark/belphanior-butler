@@ -5,6 +5,7 @@
 = javascript_include_tag "log"
 = javascript_include_tag "communicate"
 = javascript_include_tag "role"
+= javascript_include_tag "signals"
 %script{:type => "text/javascript", :src => "/blockly/demos/blockly_compressed.js"}
 %script{:type => "text/javascript", :src => "/blockly/generators/javascript.js"}
 %script{:type => "text/javascript", :src => "/blockly/generators/javascript/control.js"}
@@ -15,6 +16,7 @@
 %script{:type => "text/javascript", :src => "/blockly/language/common/logic.js"}
 %script{:type => "text/javascript", :src => "/blockly/language/common/math.js"}
 %script{:type => "text/javascript", :src => "/blockly/language/common/variables.js"}
+%script{:type =>  "text/javascript", :src=> "/custom_blockly.js"}
 %script{:type => "text/javascript", :src => "/roles_to_blockly.js"}
 
 :css
@@ -29,7 +31,11 @@
     width: 100%;
   }
 :javascript
+  variable_names = []
   function blockly_init() {
+    Handle("GET_VARIABLE_NAMES", function (receiver) {
+      receiver(variable_names);
+    });
     communicator = new Ajax(
       function(success_response) {
         Blockly.Belphanior.rolesToBlocks(success_response.data);
@@ -39,6 +45,12 @@
       },
       function(fail_response) {
         $("#error").html(fail_response.long_description);
+      });
+    communicator.get("/variable/get",
+      function (success_response) {
+        $.each(success_response.data, function(idx, variable) {
+          variable_names.push(variable['name']);
+        });
       });
     communicator.get("/documentation/get");
   }

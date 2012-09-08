@@ -8,6 +8,7 @@ module Blockly
       @stdout = ""
       # top of the stack is last
       @local_variables = {}
+      @global_variables = VariableAdaptor.new
       @scriptrunner = ScriptRunner.new
       @servants_by_role = {}
       # For each role, map one default servant.
@@ -40,6 +41,17 @@ module Blockly
 
     def set_local_variable_value(variable_name, variable_value)
       @local_variables[variable_name] = variable_value
+    end
+    def get_global_variable_value(variable_name)
+      begin
+        @global_variables[variable_name]
+      rescue VariableAdaptor::VariableDoesNotExistError
+        raise Error.new("Unable to find global '#{variable_name}'");
+      end
+    end
+    def set_global_variable_value(variable_name, variable_value)
+      # TODO: Should parse this value into JSON.
+      @global_variables[variable_name] = variable_value
     end
   end
 end

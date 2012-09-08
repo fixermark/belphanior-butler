@@ -3,6 +3,7 @@ require 'xmlsimple'
 require 'blockly/code/boolean'
 require 'blockly/code/count_with'
 require 'blockly/code/clamp'
+require 'blockly/code/get_global'
 require 'blockly/code/get_variable'
 require 'blockly/code/if'
 require 'blockly/code/index_of'
@@ -11,7 +12,9 @@ require 'blockly/code/op'
 require 'blockly/code/not'
 require 'blockly/code/number'
 require 'blockly/code/plus_equals'
+require 'blockly/code/set_global'
 require 'blockly/code/set_variable'
+require 'blockly/code/sleep'
 require 'blockly/code/string'
 require 'blockly/code/sequence'
 require 'blockly/code/while'
@@ -90,6 +93,10 @@ module Blockly
           result_block = parse_variables_set block
         when 'variables_get'
           result_block = parse_variables_get block
+        when 'variables_global_get'
+          result_block = parse_variables_global_get block
+        when 'variables_global_set'
+          result_block = parse_variables_global_set block
         when 'controls_if'
           result_block = parse_if block
         when 'controls_whileUntil'
@@ -98,6 +105,8 @@ module Blockly
           result_block = parse_count_with block
         when 'controls_flow_statements'
           result_block = parse_loop_flow block
+        when 'controls_sleep'
+          result_block = parse_sleep block
         when /^belphanior_/
           result_block = parse_belphanior block
         end
@@ -274,6 +283,11 @@ module Blockly
           next_block_id,
           block['title'][0]['content'])
       end
+      def parse_sleep(block)
+        Blockly::Code::Sleep.new(
+          next_block_id,
+          parse_block(block['value'][0]['block'][0]))
+      end
       def parse_variables_set(block)
         Blockly::Code::SetVariable.new(
           next_block_id,
@@ -282,6 +296,17 @@ module Blockly
       end
       def parse_variables_get(block)
         Blockly::Code::GetVariable.new(
+          next_block_id,
+          block['title'][0]['content'])
+      end
+      def parse_variables_global_set(block)
+        Blockly::Code::SetGlobal.new(
+          next_block_id,
+          block['title'][0]['content'],
+          parse_block(block['value'][0]['block'][0]))
+      end
+      def parse_variables_global_get(block)
+        Blockly::Code::GetGlobal.new(
           next_block_id,
           block['title'][0]['content'])
       end
