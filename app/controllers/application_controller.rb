@@ -37,14 +37,22 @@ class ScriptAdaptor
     if not requested_script then
       raise ScriptDoesNotExistError, "No script by name '#{name}'"
     end
-    # Need to return a callable; compile that script!
-    runner = ScriptRunner.new
-    Proc.new {
-      eval(
-           requested_script.command,
-           runner.anonymous_script,
-           requested_script.name, 1)
-    }
+    if requested_script.format == "ruby"
+      # Need to return a callable; compile that script!
+      runner = ScriptRunner.new
+      Proc.new {
+        eval(
+          requested_script.command,
+          runner.anonymous_script,
+          requested_script.name, 1)
+      }
+    else  # Blockly!
+      parser = Blockly::Xml::Parser.new
+      code = parser.parse(requested_script.command)
+      context = Blockly::Context.new
+      code.evaluate(context)
+      context.stdout
+    end
   end
 
   def call(name)
