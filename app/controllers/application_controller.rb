@@ -50,8 +50,10 @@ class ScriptAdaptor
       parser = Blockly::Xml::Parser.new
       code = parser.parse(requested_script.command)
       context = Blockly::Context.new
-      code.evaluate(context)
-      context.stdout
+      Proc.new {
+        code.evaluate(context)
+        context.stdout
+      }
     end
   end
 
