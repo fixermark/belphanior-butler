@@ -4,6 +4,7 @@ class DoController < ApplicationController
     if request.method == 'GET' then
       respond_with_json({
         "name" => "commandable",
+        "url" => "http://belphanior.net/roles/commandable/v1",
         "description" => "A generalized interface for servants that respond to dynamic commands.",
         "commands" => [{
           "name" => "do",
