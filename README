@@ -15,13 +15,27 @@ Features:
 
 == Getting Started
 
-Belphanior Butler is a Rails app that has been tested in development mode. To start:
+Belphanior Butler is a Rails app that has been tested in development mode.
+To start, clone this repository and run the following in the cloned directory
 
-* Clone this repository
-* Run the following in the cloned directory
     bundle install                                             # Installs the dependent gems
     rake db:migrate                                            # Sets up the database
     script/backgroundrb start                                  # Starts the servant watcher
     script/rails server --environment=development --port=3000  # Start the butler
 
-  The butler should now be running on localhost:3000.
+The butler should now be running on localhost:3000. To test, navigate to localhost:3000
+in your browser and you should see the control panel tab.
+
+== System Information
+
+Belphanior butler has been tested on Ubuntu 10.04 LTS and Debian GNU/Linux 6.0
+(Kirkwood, on the [SheevaPlug](http://www.globalscaletechnologies.com/p-46-sheevaplug-dev-kit.aspx)
+hardware platform).
+
+== License
+
+Belphanior Butler is licensed under the Apache license 2.0. See the LICENSE file for more details.
+
+== For More Information
+
+Consult the [project home page](http://belphanior.net).
