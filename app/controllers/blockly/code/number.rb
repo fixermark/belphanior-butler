@@ -5,7 +5,7 @@ module Blockly
   module Code
     class Number < Root
       def initialize(block_id, value)
-        super (block_id)
+        super(block_id)
         @value = value
       end
 

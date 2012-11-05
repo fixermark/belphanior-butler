@@ -27,11 +27,11 @@
         // matches the path we're in
         var locs = $.url($(location).attr('href'))
           .attr('path').split('/');
-        if(locs.length >= 2) {
-          $("#app_"+locs[1]+"_tab")
-            .addClass("ui-tabs-selected")
-            .addClass("ui-state-active");
+        var loc = "#app_control_panel_tab";
+        if(locs.length >= 2 && locs[1] != "") {
+          loc = "#app_" + locs[1] + "_tab";
         }
+        $(loc).addClass("ui-tabs-selected").addClass("ui-state-active");
       }
 
       function run_command_text(
