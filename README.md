@@ -1,4 +1,4 @@
-== Belphanior Butler
+## Belphanior Butler
 
 Belphanior Butler is a command and control program for a Belphanior home automation network.
 
@@ -13,7 +13,7 @@ Features:
   [the calendar watcher](http://github.com/fixermark/belphanior-calendar-watcher-servant)
   may trigger scripts in the butler.
 
-== Getting Started
+## Getting Started
 
 Belphanior Butler is a Rails app that has been tested in development mode.
 To start, clone this repository and run the following in the cloned directory
@@ -26,16 +26,16 @@ To start, clone this repository and run the following in the cloned directory
 The butler should now be running on localhost:3000. To test, navigate to localhost:3000
 in your browser and you should see the control panel tab.
 
-== System Information
+## System Information
 
 Belphanior butler has been tested on Ubuntu 10.04 LTS and Debian GNU/Linux 6.0
 (Kirkwood, on the [SheevaPlug](http://www.globalscaletechnologies.com/p-46-sheevaplug-dev-kit.aspx)
 hardware platform).
 
-== License
+## License
 
 Belphanior Butler is licensed under the Apache license 2.0. See the LICENSE file for more details.
 
-== For More Information
+## For More Information
 
 Consult the [project home page](http://belphanior.net).
